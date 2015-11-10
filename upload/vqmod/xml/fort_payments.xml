@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+    <id>FORT Payment Gateway Extension</id>
+    <vqmver required="true">1.0.0</vqmver>
+    <author>PayFort</author>
+	
+    <file name="catalog/view/theme/default/template/checkout/checkout.tpl">
+        <operation error="skip">
+            <search position="after"><![CDATA[<?php echo $header; ?><?php echo $column_left; ?><?php echo $column_right; ?>]]></search>
+
+    </file>
+    <file name="catalog/controller/checkout/payment_method.php">
+        <operation error="skip">
+            <search position="before"><![CDATA[$this->response->setOutput(json_encode($json));]]></search>
+            <add></add>
+        </operation>
+          
+    </file>
+     
+</modification>
+
