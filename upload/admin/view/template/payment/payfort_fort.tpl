@@ -191,12 +191,13 @@
               </select>
             </div>
           </div>
-            <?php $u = new Url('/')?>
+            <?php $u = new Url('/');?>
+            <?php $s = 'http'.((empty($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off')?'':'s');?>
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="">Host to Host URL:</label>
                 <div class="col-sm-10">
                   <tr>
-                      <input size="50" type="text" readonly="readonly" value="<?php echo str_replace('/admin/index.php', '', $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']. $_SERVER['PHP_SELF']) . $u->link('payment/payfort_fort/response');?>" class="form-control" readonly/>
+                      <input size="50" type="text" readonly="readonly" value="<?php echo str_replace('/admin/index.php', '', $s .'://'.$_SERVER['HTTP_HOST']. $_SERVER['PHP_SELF']) . $u->link('payment/payfort_fort/response');?>" class="form-control" readonly/>
                   </tr>
                 </div>
             </div>
