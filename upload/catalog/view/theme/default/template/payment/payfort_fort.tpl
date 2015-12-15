@@ -8,7 +8,7 @@ $('#button-confirm').bind('click', function () {
         $.ajax({
             url: 'index.php?route=payment/payfort_fort/send',
             type: 'post',
-            data: $('.start_response :input'),
+            data: {SADAD:$('#payfort_sadad').is(':checked'), NAPS:$('#payfort_naps').is(':checked')},
             dataType: 'json',
             beforeSend: function () {
                 $('#button-confirm').attr('disabled', true);

@@ -13,12 +13,17 @@ $_['text_sha1']		                = 'SHA-1';
 $_['text_sha256']		            = 'SHA-256';
 $_['text_sha512']		            = 'SHA-512';
 $_['text_payment']					= 'Payments';
+$_['text_yes']		                = 'Yes';
+$_['text_no']		                = 'No';
 
 
 $_['entry_merchant_identifier']		= 'Merchant Identifier';
 $_['entry_purchase']		        = 'purchase';
 $_['entry_authorization']		    = 'authorization';
 $_['entry_language']		        = 'Language';
+$_['entry_sadad']		            = 'Enable SADAD';
+$_['entry_naps']		            = 'Enable NAPS';
+$_['entry_credit_card']		        = 'Enable Credit \ Debit Card';
 $_['entry_merchant_identifier']		= 'Merchant identifier';
 $_['entry_access_code']		        = 'Access Code';
 $_['entry_command']		            = 'Command';
@@ -43,3 +48,4 @@ $_['error_payfort_fort_entry_merchant_identifier']				= 'Merchant Identifier Req
 $_['error_payfort_fort_entry_access_code']				        = 'Access Code Required!';
 $_['error_payfort_fort_entry_request_sha_phrase']				= 'Request SHA Phrase Required!';
 $_['error_payfort_fort_entry_response_sha_phrase']				= 'Response SHA Phrase Required!';
+$_['payfort_fort_payment_method_required']				        = 'At Least 1 Payment Method Should Be Enabled!';

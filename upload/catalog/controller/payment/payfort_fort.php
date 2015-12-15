@@ -84,6 +84,20 @@ class ControllerPaymentPayfortFort extends Controller {
             'return_url'            => $this->url->link('payment/payfort_fort/response'),
         );
         
+        $isSADAD = isset($_POST['SADAD']) ? $_POST['SADAD'] : false;
+        $isNaps = isset($_POST['NAPS']) ? $_POST['NAPS'] : false;
+
+        $this->db->query("UPDATE `" . DB_PREFIX . "order` SET payment_method = 'Credit / Debit Card', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
+        
+        if ($isSADAD == "true"){
+            $postData['payment_option'] = 'SADAD';
+            $this->db->query("UPDATE `" . DB_PREFIX . "order` SET payment_method = 'SADAD', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
+        }
+        else if ($isNaps == "true"){
+            $postData['payment_option'] = 'NAPS';
+            $postData['order_description'] = $order_id;
+        }
+        
         //calculate request signature
         $shaString = '';
         ksort($postData);

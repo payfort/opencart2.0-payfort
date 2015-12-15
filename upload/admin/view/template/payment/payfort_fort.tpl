@@ -151,6 +151,58 @@
             </div>
           </div>
           
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for=""><?php echo $entry_credit_card;; ?></label>
+                <div class="col-sm-10">
+                    <select name="payfort_fort_credit_card" class="form-control">
+                        <?php if ($payfort_fort_credit_card) { ?>
+                        <option value="1" selected="selected"><?php echo $text_yes; ?></option>
+                        <option value="0"><?php echo $text_no; ?></option>
+                        <?php } else { ?>
+                        <option value="1"><?php echo $text_yes; ?></option>
+                        <option value="0" selected="selected"><?php echo $text_no; ?></option>
+                        <?php } ?>
+                     </select>
+                    <?php if ($payfort_fort_payment_method_required) { ?>
+                    <span style="color:red"><?php echo $payfort_fort_payment_method_required; ?></span>
+                    <?php } ?>
+                </div>
+            </div>
+        
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for=""><?php echo $entry_sadad;; ?></label>
+                <div class="col-sm-10">
+                    <select name="payfort_fort_sadad" class="form-control">
+                        <?php if ($payfort_fort_sadad) { ?>
+                        <option value="1" selected="selected"><?php echo $text_yes; ?></option>
+                        <option value="0"><?php echo $text_no; ?></option>
+                        <?php } else { ?>
+                        <option value="1"><?php echo $text_yes; ?></option>
+                        <option value="0" selected="selected"><?php echo $text_no; ?></option>
+                        <?php } ?>
+                     </select>
+                     <?php if ($payfort_fort_payment_method_required) { ?>
+                    <span style="color:red"><?php echo $payfort_fort_payment_method_required; ?></span>
+                    <?php } ?>
+                </div>
+            </div>
+
+
+            <!--<div class="form-group">
+                <label class="col-sm-2 control-label" for=""><?php echo $entry_naps; ?></label>
+                <div class="col-sm-10">
+                    <select name="payfort_fort_naps" class="form-control">
+                        <?php if ($payfort_fort_naps) { ?>
+                        <option value="1" selected="selected"><?php echo $text_yes; ?></option>
+                        <option value="0"><?php echo $text_no; ?></option>
+                        <?php } else { ?>
+                        <option value="1"><?php echo $text_yes; ?></option>
+                        <option value="0" selected="selected"><?php echo $text_no; ?></option>
+                        <?php } ?>
+                     </select>
+                </div>
+            </div>-->
+
           <div class="form-group">
             <label class="col-sm-2 control-label" for=""><?php echo $entry_order_status;; ?></label>
             <div class="col-sm-10">
