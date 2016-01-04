@@ -188,7 +188,7 @@
             </div>
 
 
-            <!--<div class="form-group">
+            <div class="form-group">
                 <label class="col-sm-2 control-label" for=""><?php echo $entry_naps; ?></label>
                 <div class="col-sm-10">
                     <select name="payfort_fort_naps" class="form-control">
@@ -200,8 +200,11 @@
                         <option value="0" selected="selected"><?php echo $text_no; ?></option>
                         <?php } ?>
                      </select>
+                     <?php if ($payfort_fort_payment_method_required) { ?>
+                    <span style="color:red"><?php echo $payfort_fort_payment_method_required; ?></span>
+                    <?php } ?>
                 </div>
-            </div>-->
+            </div>
 
           <div class="form-group">
             <label class="col-sm-2 control-label" for=""><?php echo $entry_order_status;; ?></label>

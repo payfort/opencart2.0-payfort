@@ -237,7 +237,7 @@ class ControllerPaymentPayfortFort extends Controller {
             $this->error['payfort_fort_entry_response_sha_phrase'] = $this->language->get('error_payfort_fort_entry_response_sha_phrase');
         }
         
-        if (!$this->request->post['payfort_fort_credit_card'] && !$this->request->post['payfort_fort_sadad'] && $this->request->post['payfort_fort_status']) {
+        if (!$this->request->post['payfort_fort_credit_card'] && !$this->request->post['payfort_fort_sadad'] && !$this->request->post['payfort_fort_naps'] && $this->request->post['payfort_fort_status']) {
             $this->error['payfort_fort_payment_method_required'] = $this->language->get('payfort_fort_payment_method_required');
         }
         
