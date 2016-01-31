@@ -1,12 +1,12 @@
 <?php 
-class ModelPaymentPayfortFort extends Model {
+class ModelPaymentPayfortFortSadad extends Model {
 	public function getMethod($address, $total) {
 		$this->language->load('payment/payfort_fort');
-                $credit_card_enabled = $this->config->get('payfort_fort_credit_card');
-
+                $sadad_enabled = $this->config->get('payfort_fort_sadad');
+                
                 $status = true;
                 
-                if(!$credit_card_enabled) {
+                if(!$sadad_enabled) {
                     $status = false;
                 }
                 
@@ -14,12 +14,11 @@ class ModelPaymentPayfortFort extends Model {
                 
                 if($status) {
                     $method_data = array(
-                            'code'       => 'payfort_fort',
-                            'title'      => $this->language->get('text_title') ,
-                            'sort_order' => $this->config->get('payfort_fort_sort_order'),
+                            'code'       => 'payfort_fort_sadad',
+                            'title'      => $this->language->get('text_sadad'),
+                            'sort_order' => $this->config->get('payfort_fort_sadad_sort_order'),
                             'terms'      => ''
                     );
-
                 }
                 
                 return $method_data;

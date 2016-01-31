@@ -13,7 +13,14 @@ class ControllerPaymentPayfortFort extends Controller {
 
         if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
             $this->model_setting_setting->editSetting('payfort_fort', $this->request->post);
-
+            
+            $sadad_post = $this->fixPostData($this->request->post, 'sadad');
+            $this->model_setting_setting->editSetting('payfort_fort_sadad', $sadad_post);
+            
+            $qpay_post = $this->fixPostData($this->request->post, 'qpay');
+            $this->model_setting_setting->editSetting('payfort_fort_qpay', $qpay_post);
+            
+            
             $this->session->data['success'] = $this->language->get('text_success');
 
             $this->response->redirect($this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL'));
@@ -248,6 +255,30 @@ class ControllerPaymentPayfortFort extends Controller {
         }
     }
 
+    public function install() {
+            $this->load->model('extension/extension');
+            $this->model_extension_extension->install('payment', 'payfort_fort_sadad');
+            $this->model_extension_extension->install('payment', 'payfort_fort_qpay');
+    }
+
+    public function uninstall() {
+            $this->load->model('extension/extension');
+            $this->model_extension_extension->uninstall('payment', 'payfort_fort_sadad');
+            $this->model_extension_extension->uninstall('payment', 'payfort_fort_qpay');
+            
+            $this->load->model('setting/setting');
+            $this->model_setting_setting->deleteSetting('payfort_fort_sadad');
+            $this->model_setting_setting->deleteSetting('payfort_fort_qpay');
+    }
+
+    private function fixPostData($post, $code) {
+            $newPost = array();
+            foreach($post as $key => $value) {
+                $newstr = substr_replace($key, '_'.$code, strlen('payfort_fort'), 0);
+                $newPost[$newstr] = $value; 
+            }
+            return $newPost;
+    }
 }
 
 ?>

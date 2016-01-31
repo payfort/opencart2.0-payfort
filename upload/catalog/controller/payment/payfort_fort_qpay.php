@@ -1,6 +1,6 @@
 <?php
 
-class ControllerPaymentPayfortFort extends Controller {
+class ControllerPaymentPayfortFortQpay extends Controller {
 
     public function index() {
         $this->language->load('payment/payfort_fort');
@@ -8,10 +8,10 @@ class ControllerPaymentPayfortFort extends Controller {
         $data['text_general_error']  = $this->language->get('text_general_error');
         $data['text_error_card_decline'] = $this->language->get('text_error_card_decline');
         
-        if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/payfort_fort.tpl')) {
-            $this->template = $this->config->get('config_template') . '/template/payment/payfort_fort.tpl';
+        if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/payfort_fort_qpay.tpl')) {
+            $this->template = $this->config->get('config_template') . '/template/payment/payfort_fort_qpay.tpl';
         } else {
-            $this->template = 'default/template/payment/payfort_fort.tpl';
+            $this->template = 'default/template/payment/payfort_fort_qpay.tpl';
         }
         return $this->load->view($this->template, $data);
 
@@ -87,9 +87,10 @@ class ControllerPaymentPayfortFort extends Controller {
             'language'              => $this->config->get('payfort_fort_entry_language'),
             'return_url'            => $this->url->link('payment/payfort_fort/response'),
         );
+        $postData['payment_option'] = 'NAPS';
+        $postData['order_description'] = $order_id;
         
-
-        $this->db->query("UPDATE `" . DB_PREFIX . "order` SET payment_method = 'Credit / Debit Card', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
+        $this->db->query("UPDATE `" . DB_PREFIX . "order` SET payment_method = 'NAPS', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
         
         
         //calculate request signature

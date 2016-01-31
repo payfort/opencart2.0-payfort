@@ -138,15 +138,23 @@
             <label class="col-sm-2 control-label" for=""><?php echo $entry_sandbox;; ?></label>
             <div class="col-sm-10">
                   <?php if ($payfort_fort_entry_sandbox_mode) { ?>
-                  <input type="radio" name="payfort_fort_entry_sandbox_mode" value="1" checked="checked" class=""/>
-                  <?php echo $text_yes; ?>
-                  <input type="radio" name="payfort_fort_entry_sandbox_mode" value="0" class="" />
-                  <?php echo $text_no; ?>
+                  <label class="radio-inline">
+                    <input type="radio" name="payfort_fort_entry_sandbox_mode" value="1" checked="checked" class=""/>
+                    <?php echo $text_yes; ?>
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" name="payfort_fort_entry_sandbox_mode" value="0" class="" />
+                    <?php echo $text_no; ?>
+                  </label>
                   <?php } else { ?>
-                  <input type="radio" name="payfort_fort_entry_sandbox_mode" value="1" class="" />
-                  <?php echo $text_yes; ?>
-                  <input type="radio" name="payfort_fort_entry_sandbox_mode" value="0" checked="checked"  class=""/>
-                  <?php echo $text_no; ?>
+                  <label class="radio-inline">
+                    <input type="radio" name="payfort_fort_entry_sandbox_mode" value="1" class="" />
+                    <?php echo $text_yes; ?>
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" name="payfort_fort_entry_sandbox_mode" value="0" checked="checked"  class=""/>
+                    <?php echo $text_no; ?>
+                  </label>
                   <?php } ?>
             </div>
           </div>

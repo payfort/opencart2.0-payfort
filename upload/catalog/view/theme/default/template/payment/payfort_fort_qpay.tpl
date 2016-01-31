@@ -6,7 +6,7 @@
 <script type="text/javascript"><!--
 $('#button-confirm').bind('click', function () {
         $.ajax({
-            url: 'index.php?route=payment/payfort_fort/send',
+            url: 'index.php?route=payment/payfort_fort_qpay/send',
             type: 'post',
             dataType: 'json',
             beforeSend: function () {
