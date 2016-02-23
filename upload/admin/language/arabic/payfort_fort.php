@@ -3,7 +3,7 @@
 $_['heading_title'] = 'Payfort FORT';
 
 
-$_['text_success']       = 'لقد قمت بتعديل تفاصيل حساب الدفع !'; 
+$_['text_success']       = 'لقد قمت بتعديل تفاصيل حساب الدفع !';
 $_['text_edit']          = 'تعديل';
 $_['text_purchase']      = 'شراء';
 $_['text_authorization'] = 'تخويل';
@@ -15,6 +15,8 @@ $_['text_sha512']        = 'SHA-512';
 $_['text_payment']       = 'الدفعات';
 $_['text_yes']           = 'نعم';
 $_['text_no']            = 'لا';
+$_['text_redirection']   = 'Redirection';
+$_['text_merchant_page'] = 'Merchant Page';
 
 
 $_['entry_merchant_identifier'] = 'معرف التاجر';
@@ -22,7 +24,7 @@ $_['entry_purchase']            = 'شراء';
 $_['entry_authorization']       = 'تخويل';
 $_['entry_language']            = 'اللغة';
 $_['entry_sadad']               = 'تفعيل خدمة سداد';
-$_['entry_naps']                = '"NAPS"تفعيل خدمة'; 
+$_['entry_naps']                = '"NAPS"تفعيل خدمة';
 $_['entry_credit_card']         = 'تفعيل البطاقات الائتمانية/ بطاقات الدين';
 $_['entry_access_code']         = 'رمز الوصول';
 $_['entry_command']             = 'أمر';
@@ -33,13 +35,15 @@ $_['entry_sort_order']          = 'ترتيب الطلبات';
 $_['entry_hash_algorithm']      = 'خوارزمية التجزئة';
 $_['entry_request_sha_phrase']  = 'عبارة طلب تشفير (SHA)';
 $_['entry_response_sha_phrase'] = 'عبارة رد تشفير (SHA)';
+$_['entry_cc_integration_type'] = 'Integration Type';
+$_['entry_debug']               = 'Debug mode:';
 
-$_['text_payfort_fort'] = '<a href="https://www.payfort.com" target="_blank"><img src="view/image/payment/payfort_logo.png" alt="Payfort FORT" title="Payfort FORT" style="border: 1px solid #EEEEEE;" /></a>';
+$_['text_payfort_fort']        = '<a href="https://www.payfort.com" target="_blank"><img src="view/image/payment/payfort_logo.png" alt="Payfort FORT" title="Payfort FORT" style="border: 1px solid #EEEEEE;" /></a>';
 
-
-$_['help_test']  = 'استخدم بوابة خادم البوابة المباشرة أو بوابة التجربة لمعالجة العملية';
-$_['help_total'] = 'إجمالي المبلغ الذي يجب أن يصله الطلب عند تسجيل الخروج قبل تفعيل وسيلة الدفع هذه';
-
+$_['help_test']                = 'استخدم بوابة خادم البوابة المباشرة أو بوابة التجربة لمعالجة العملية';
+$_['help_total']               = 'إجمالي المبلغ الذي يجب أن يصله الطلب عند تسجيل الخروج قبل تفعيل وسيلة الدفع هذه';
+$_['help_cc_integration_type'] = 'Credit \ Debit Card Integration Type';
+$_['help_debug']               = 'Logs additional information.';
 
 $_['error_permission'] = 'تحذير: لا يمكنك تعديل دفعات الـFORT ';
 

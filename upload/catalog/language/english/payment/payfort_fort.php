@@ -1,17 +1,22 @@
 <?php
 
 // Text
-$_['text_title']            = 'Credit or Debit Card';
-$_['text_wait']             = 'Please wait!';
-$_['text_credit_card']      = 'Credit Card Details';
-$_['text_loading']          = 'Loading';
-$_['text_sadad']            = 'SADAD';
-$_['text_naps']             = 'NAPS';
-$_['text_payment_failed']   = 'Error: Payment Failed, Please check your payment details and try again, PAYFORT Message: ';
-$_['text_p_success']        = 'Success';
-$_['heading_success_title'] = 'Your Order Has Been Processed!';
+$_['text_title']                 = 'بطاقة ائتمان';
+$_['text_wait']                  = 'يرجى الانتظار';
+$_['text_credit_card']           = 'تفاصيل بطاقة الائتمان';
+$_['text_loading']               = 'جاري التحميل';
+$_['text_sadad']                 = 'سداد';
+$_['text_naps']                  = 'نابس';
+$_['text_payment_failed']        = 'خطأ :  فشلت عملية الدفع, يرجى التحقق من تفاصيل الدفع و المحاولة مرة أخرى, رسالة بيفورت: ';
+$_['text_payment_canceled']      = 'you have canceled the payment, please try agian.';
+$_['text_p_success']             = 'نجاح';
+$_['text_save_credit_card_note'] = 'Save Card Info';
+$_['heading_success_title']      = 'تمت عملية الدفع بنجاح';
 
-$_['text_success_customer']   = '<p>Your order has been successfully processed!</p><p>You can view your order history by going to the <a href="%s">my account</a> page and by clicking on <a href="%s">history</a>.</p><p>If your purchase has an associated download, you can go to the account <a href="%s">downloads</a> page to view them.</p><p>Please direct any questions you have to the <a href="%s">store owner</a>.</p><p>Thanks for shopping with us online!</p>';
-$_['text_success_guest']      = '<p>Your order has been successfully processed!</p><p>Please direct any questions you have to the <a href="%s">store owner</a>.</p><p>Thanks for shopping with us online!</p>';
-$_['text_general_error']      = 'An error occured, please try again later.';
-$_['text_error_card_decline'] = 'Card declined. Please use another card';
+$_['text_success_customer']   = '<p>لقد تم استلام طلبك بنجاح!</p><p>يمكنك عرض الطلبات السابقة بالانتقال إلى<a href="%s"> حسابك</a> و الضغط على<a href="%s"> الطلبات السابقة</a>.</p><p>إذا كان هنالك وثائق لطلبك يمكنك تحميلها من <a href="%s">التحميلات</a></p><p>يرجى توجيه اسئلتك إلى <a href="%s">مدير المتجر<br/></a> نشكرك على التسوق معنا.</p>';
+$_['text_success_guest']      = '<p>تمت معالجة طلبك بنجاح!</p><p>يرجى توجيه اسئلتك إلى<a href="%s"> مدير المتجر</a>.</p> نشكرك على التسوق معنا';
+$_['text_general_error']      = 'خطأ في النظام, الرجاء المحاولة لاحقا';
+$_['text_error_card_decline'] = 'تم رفض البطاقة, الرجاء استخدام بطاقة اخرى';
+$_['text_secure_connection']  = 'Creating a secure connection...';
+$_['error_connection']        = 'Could not connect to PayFort. Please contact the shop\'s administrator for assistance or choose a different payment method.';
+

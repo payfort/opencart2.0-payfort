@@ -75,7 +75,7 @@ class ControllerPaymentPayfortFortQpay extends Controller {
         $this->load->model('checkout/order');
         $order_id = $this->session->data['order_id'];
         $order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
-
+        
         $postData = array(
             'amount'                => round($order_info['total'] * $order_info['currency_value'],2) * 100,
             'currency'              => strtoupper($order_info['currency_code']),

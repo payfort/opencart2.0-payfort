@@ -57,12 +57,19 @@ class ControllerPaymentPayfortFort extends Controller {
         $data['entry_sadad'] = $this->language->get('entry_sadad');
         $data['entry_naps'] = $this->language->get('entry_naps');
         $data['entry_credit_card'] = $this->language->get('entry_credit_card');
+        $data['entry_cc_integration_type'] = $this->language->get('entry_cc_integration_type');
+        $data['help_cc_integration_type'] = $this->language->get('help_cc_integration_type');
+        $data['text_merchant_page'] = $this->language->get('text_merchant_page');
+        $data['text_redirection'] = $this->language->get('text_redirection');
         $data['text_yes'] = $this->language->get('text_yes');
         $data['text_no'] = $this->language->get('text_no');
-
+        $data['entry_debug'] = $this->language->get('entry_debug');
+        $data['help_debug'] = $this->language->get('help_debug');
+                
         $data['button_save'] = $this->language->get('button_save');
         $data['button_cancel'] = $this->language->get('button_cancel');
-
+        
+        
 
         if (isset($this->error['warning'])) {
             $data['error_warning'] = $this->error['warning'];
@@ -179,6 +186,12 @@ class ControllerPaymentPayfortFort extends Controller {
         } else {
             $data['payfort_fort_order_status_id'] = $this->config->get('payfort_fort_order_status_id');
         }
+        
+        if (isset($this->request->post['payfort_fort_debug'])) {
+                $data['payfort_fort_debug'] = $this->request->post['payfort_fort_debug'];
+        } else {
+                $data['payfort_fort_debug'] = $this->config->get('payfort_fort_debug');
+        }
 
         $this->load->model('localisation/order_status');
 
@@ -202,6 +215,12 @@ class ControllerPaymentPayfortFort extends Controller {
             $data['payfort_fort_credit_card'] = $this->config->get('payfort_fort_credit_card');
         }
 
+        if (isset($this->request->post['payfort_fort_cc_integration_type'])) {
+            $data['payfort_fort_cc_integration_type'] = $this->request->post['payfort_fort_cc_integration_type'];
+        } else {
+            $data['payfort_fort_cc_integration_type'] = $this->config->get('payfort_fort_cc_integration_type');
+        }
+        
         if (isset($this->request->post['payfort_fort_status'])) {
             $data['payfort_fort_status'] = $this->request->post['payfort_fort_status'];
         } else {

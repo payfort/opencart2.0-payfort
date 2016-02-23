@@ -44,123 +44,138 @@
             </div>
           </div>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label" for=""><?php echo $entry_merchant_identifier; ?>*</label>
-            <div class="col-sm-10">
-              <tr>
-                <input type="text" size ="50" name="payfort_fort_entry_merchant_identifier" value="<?php echo $payfort_fort_entry_merchant_identifier; ?>" class="form-control" />
-                  <?php if ($error_payfort_fort_entry_merchant_identifier) { ?>
-                  <span style="color:red"><?php echo $error_payfort_fort_entry_merchant_identifier; ?></span>
-                  <?php } ?>
-              </tr>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for=""><?php echo $entry_merchant_identifier; ?>*</label>
+                <div class="col-sm-10">
+                  <tr>
+                    <input type="text" size ="50" name="payfort_fort_entry_merchant_identifier" value="<?php echo $payfort_fort_entry_merchant_identifier; ?>" class="form-control" />
+                      <?php if ($error_payfort_fort_entry_merchant_identifier) { ?>
+                      <span style="color:red"><?php echo $error_payfort_fort_entry_merchant_identifier; ?></span>
+                      <?php } ?>
+                  </tr>
+                </div>
             </div>
-        </div>
-        
-        <div class="form-group">
-            <label class="col-sm-2 control-label" for=""><?php echo $entry_access_code; ?>*</label>
-            <div class="col-sm-10">
-              <tr>
-                  <input type="text" size ="50" name="payfort_fort_entry_access_code" value="<?php echo $payfort_fort_entry_access_code; ?>" class="form-control"/>
-                  <?php if ($error_payfort_fort_entry_merchant_identifier) { ?>
-                  <span style="color:red"><?php echo $error_payfort_fort_entry_access_code; ?></span>
-                  <?php } ?>
-              </tr>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for=""><?php echo $entry_access_code; ?>*</label>
+                <div class="col-sm-10">
+                  <tr>
+                      <input type="text" size ="50" name="payfort_fort_entry_access_code" value="<?php echo $payfort_fort_entry_access_code; ?>" class="form-control"/>
+                      <?php if ($error_payfort_fort_entry_merchant_identifier) { ?>
+                      <span style="color:red"><?php echo $error_payfort_fort_entry_access_code; ?></span>
+                      <?php } ?>
+                  </tr>
+                </div>
             </div>
-        </div>
-        
-        
-        <div class="form-group">
-            <label class="col-sm-2 control-label" for=""><?php echo $entry_command;; ?></label>
-            <div class="col-sm-10">
-             <select name="payfort_fort_entry_command" class="form-control">
-                <?php if ($payfort_fort_entry_command == 'PURCHASE') { ?>
-                <option value="PURCHASE" selected="selected"><?php echo $text_purchase; ?></option>
-                <?php } else { ?>
-                <option value="PURCHASE"><?php echo $text_purchase; ?></option>
-                <?php } ?>
-                <?php if ($payfort_fort_entry_command == 'AUTHORIZATION') { ?>
-                <option value="AUTHORIZATION" selected="selected"><?php echo $text_authorization; ?></option>
-                <?php } else { ?>
-                <option value="AUTHORIZATION"><?php echo $text_authorization; ?></option>
-                <?php } ?>
-              </select>
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for=""><?php echo $entry_command;; ?></label>
+                <div class="col-sm-10">
+                 <select name="payfort_fort_entry_command" class="form-control">
+                    <?php if ($payfort_fort_entry_command == 'PURCHASE') { ?>
+                    <option value="PURCHASE" selected="selected"><?php echo $text_purchase; ?></option>
+                    <?php } else { ?>
+                    <option value="PURCHASE"><?php echo $text_purchase; ?></option>
+                    <?php } ?>
+                    <?php if ($payfort_fort_entry_command == 'AUTHORIZATION') { ?>
+                    <option value="AUTHORIZATION" selected="selected"><?php echo $text_authorization; ?></option>
+                    <?php } else { ?>
+                    <option value="AUTHORIZATION"><?php echo $text_authorization; ?></option>
+                    <?php } ?>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for=""><?php echo $entry_hash_algorithm;; ?></label>
+                <div class="col-sm-10">
+                 <select name="payfort_fort_entry_hash_algorithm" class="form-control">
+                    <?php if ($payfort_fort_entry_hash_algorithm == 'sha1') { ?>
+                    <option value="sha1" selected="selected"><?php echo $text_sha1; ?></option>
+                    <?php } else { ?>
+                    <option value="sha1"><?php echo $text_sha1 ?></option>
+                    <?php } ?>
+                    <?php if ($payfort_fort_entry_hash_algorithm == 'sha256') { ?>
+                    <option value="sha256" selected="selected"><?php echo $text_sha256; ?></option>
+                    <?php } else { ?>
+                    <option value="sha256"><?php echo $text_sha256; ?></option>
+                    <?php } ?>
+                    <?php if ($payfort_fort_entry_hash_algorithm == 'sha512') { ?>
+                    <option value="sha512" selected="selected"><?php echo $text_sha512; ?></option>
+                    <?php } else { ?>
+                    <option value="sha512"><?php echo $text_sha512; ?></option>
+                    <?php } ?>
+                  </select>
+                </div>
+              </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for=""><?php echo $entry_request_sha_phrase; ?>*</label>
+                <div class="col-sm-10">
+                  <tr>
+                      <input type="text" size ="50" name="payfort_fort_entry_request_sha_phrase" value="<?php echo $payfort_fort_entry_request_sha_phrase; ?>" class="form-control"/>
+                      <?php if ($error_payfort_fort_entry_merchant_identifier) { ?>
+                      <span style="color:red"><?php echo $error_payfort_fort_entry_request_sha_phrase; ?></span>
+                      <?php } ?>
+                  </tr>
+                </div>
             </div>
-          </div>
-          
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for=""><?php echo $entry_hash_algorithm;; ?></label>
-            <div class="col-sm-10">
-             <select name="payfort_fort_entry_hash_algorithm" class="form-control">
-                <?php if ($payfort_fort_entry_hash_algorithm == 'sha1') { ?>
-                <option value="sha1" selected="selected"><?php echo $text_sha1; ?></option>
-                <?php } else { ?>
-                <option value="sha1"><?php echo $text_sha1 ?></option>
-                <?php } ?>
-                <?php if ($payfort_fort_entry_hash_algorithm == 'sha256') { ?>
-                <option value="sha256" selected="selected"><?php echo $text_sha256; ?></option>
-                <?php } else { ?>
-                <option value="sha256"><?php echo $text_sha256; ?></option>
-                <?php } ?>
-                <?php if ($payfort_fort_entry_hash_algorithm == 'sha512') { ?>
-                <option value="sha512" selected="selected"><?php echo $text_sha512; ?></option>
-                <?php } else { ?>
-                <option value="sha512"><?php echo $text_sha512; ?></option>
-                <?php } ?>
-              </select>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for=""><?php echo $entry_response_sha_phrase; ?>*</label>
+                <div class="col-sm-10">
+                  <tr>
+                      <input type="text" size ="50" name="payfort_fort_entry_response_sha_phrase" value="<?php echo $payfort_fort_entry_response_sha_phrase; ?>" class="form-control"/>
+                      <?php if ($error_payfort_fort_entry_merchant_identifier) { ?>
+                      <span style="color:red"><?php echo $error_payfort_fort_entry_response_sha_phrase; ?></span>
+                      <?php } ?>
+                  </tr>
+                </div>
             </div>
-          </div>
-          
-        <div class="form-group">
-            <label class="col-sm-2 control-label" for=""><?php echo $entry_request_sha_phrase; ?>*</label>
-            <div class="col-sm-10">
-              <tr>
-                  <input type="text" size ="50" name="payfort_fort_entry_request_sha_phrase" value="<?php echo $payfort_fort_entry_request_sha_phrase; ?>" class="form-control"/>
-                  <?php if ($error_payfort_fort_entry_merchant_identifier) { ?>
-                  <span style="color:red"><?php echo $error_payfort_fort_entry_request_sha_phrase; ?></span>
-                  <?php } ?>
-              </tr>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for=""><?php echo $entry_sandbox;; ?></label>
+              <div class="col-sm-10">
+                    <?php if ($payfort_fort_entry_sandbox_mode) { ?>
+                    <label class="radio-inline">
+                      <input type="radio" name="payfort_fort_entry_sandbox_mode" value="1" checked="checked" class=""/>
+                      <?php echo $text_yes; ?>
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" name="payfort_fort_entry_sandbox_mode" value="0" class="" />
+                      <?php echo $text_no; ?>
+                    </label>
+                    <?php } else { ?>
+                    <label class="radio-inline">
+                      <input type="radio" name="payfort_fort_entry_sandbox_mode" value="1" class="" />
+                      <?php echo $text_yes; ?>
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" name="payfort_fort_entry_sandbox_mode" value="0" checked="checked"  class=""/>
+                      <?php echo $text_no; ?>
+                    </label>
+                    <?php } ?>
+              </div>
             </div>
-        </div>
-        
-        <div class="form-group">
-            <label class="col-sm-2 control-label" for=""><?php echo $entry_response_sha_phrase; ?>*</label>
-            <div class="col-sm-10">
-              <tr>
-                  <input type="text" size ="50" name="payfort_fort_entry_response_sha_phrase" value="<?php echo $payfort_fort_entry_response_sha_phrase; ?>" class="form-control"/>
-                  <?php if ($error_payfort_fort_entry_merchant_identifier) { ?>
-                  <span style="color:red"><?php echo $error_payfort_fort_entry_response_sha_phrase; ?></span>
-                  <?php } ?>
-              </tr>
-            </div>
-        </div>
-        
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for=""><?php echo $entry_sandbox;; ?></label>
-            <div class="col-sm-10">
-                  <?php if ($payfort_fort_entry_sandbox_mode) { ?>
-                  <label class="radio-inline">
-                    <input type="radio" name="payfort_fort_entry_sandbox_mode" value="1" checked="checked" class=""/>
-                    <?php echo $text_yes; ?>
-                  </label>
-                  <label class="radio-inline">
-                    <input type="radio" name="payfort_fort_entry_sandbox_mode" value="0" class="" />
-                    <?php echo $text_no; ?>
-                  </label>
-                  <?php } else { ?>
-                  <label class="radio-inline">
-                    <input type="radio" name="payfort_fort_entry_sandbox_mode" value="1" class="" />
-                    <?php echo $text_yes; ?>
-                  </label>
-                  <label class="radio-inline">
-                    <input type="radio" name="payfort_fort_entry_sandbox_mode" value="0" checked="checked"  class=""/>
-                    <?php echo $text_no; ?>
-                  </label>
-                  <?php } ?>
-            </div>
-          </div>
           
             <div class="form-group">
-                <label class="col-sm-2 control-label" for=""><?php echo $entry_credit_card;; ?></label>
+                <label class="col-sm-2 control-label" for="input-debug"><span data-toggle="tooltip" title="<?php echo $help_debug; ?>"><?php echo $entry_debug; ?></span></label>
+                <div class="col-sm-10">
+                    <select name="payfort_fort_debug" id="input-debug" class="form-control">
+                        <?php if ($payfort_fort_debug) { ?>
+                        <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
+                        <option value="0"><?php echo $text_disabled; ?></option>
+                        <?php } else { ?>
+                        <option value="1"><?php echo $text_enabled; ?></option>
+                        <option value="0" selected="selected"><?php echo $text_disabled; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for=""><?php echo $entry_credit_card; ?></label>
                 <div class="col-sm-10">
                     <select name="payfort_fort_credit_card" class="form-control">
                         <?php if ($payfort_fort_credit_card) { ?>
@@ -176,9 +191,24 @@
                     <?php } ?>
                 </div>
             </div>
-        
+            
             <div class="form-group">
-                <label class="col-sm-2 control-label" for=""><?php echo $entry_sadad;; ?></label>
+                <label class="col-sm-2 control-label" for="input-cc-integration-type"><span data-toggle="tooltip" title="<?php echo $help_cc_integration_type; ?>"><?php echo $entry_cc_integration_type ?></span></label>
+                <div class="col-sm-10">
+                    <select name="payfort_fort_cc_integration_type" id="input-cc-integration-type" class="form-control">
+                        <?php if ($payfort_fort_cc_integration_type == 'merchantPage') { ?>
+                        <option value="redirection"><?php echo $text_redirection ?></option>
+                        <option value="merchantPage" selected="selected"><?php echo $text_merchant_page ?></option>
+                        <?php } else { ?>
+                        <option value="redirection" selected="selected"><?php echo $text_redirection ?></option>
+                        <option value="merchantPage"><?php echo $text_merchant_page ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for=""><?php echo $entry_sadad; ?></label>
                 <div class="col-sm-10">
                     <select name="payfort_fort_sadad" class="form-control">
                         <?php if ($payfort_fort_sadad) { ?>
