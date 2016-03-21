@@ -56,6 +56,10 @@ class ControllerPaymentPayfortFort extends Controller {
             $trueSignature = $this->_calculateSignature($params, 'response');
             if ($trueSignature != $signature){
                 $success = false;
+                if ($this->config->get('payfort_fort_debug')) {
+                    $log = new Log('payfort_fort.log');
+                    $log->write(sprintf('Invalid Signature. Calculated Signature: %1s, Response Signature: %2s', $trueSignature, $signature));
+                }
             }
             else{
                 $response_code      = $params['response_code'];
@@ -108,7 +112,7 @@ class ControllerPaymentPayfortFort extends Controller {
             'customer_email'        => $order_info['email'],
             'command'               => $this->config->get('payfort_fort_entry_command'),
             'language'              => $this->config->get('payfort_fort_entry_language'),
-            'return_url'            => $this->url->link('payment/payfort_fort/response'),
+            'return_url'            => $this->_getUrl('payment/payfort_fort/response'),
         );
         
 
@@ -166,6 +170,10 @@ class ControllerPaymentPayfortFort extends Controller {
             $trueSignature = $this->_calculateSignature($params, 'response');
             if ($trueSignature != $signature){
                 $success = false;
+                if ($this->config->get('payfort_fort_debug')) {
+                    $log = new Log('payfort_fort.log');
+                    $log->write(sprintf('Invalid Signature. Calculated Signature: %1s, Response Signature: %2s', $trueSignature, $signature));
+                }
             }
             else{
                 $response_code      = $params['response_code'];
@@ -178,18 +186,29 @@ class ControllerPaymentPayfortFort extends Controller {
                 else{
                     $success = true;
                     $host2HostParams = $this->merchantPageNotifyFort($fortParams);
+                    if ($this->config->get('payfort_fort_debug')) {
+                        $log = new Log('payfort_fort.log');
+                        $log->write(print_r($host2HostParams, 1));
+                    }
                     if(!$host2HostParams) {
                         $success = false;
+                        if ($this->config->get('payfort_fort_debug')) {
+                            $log = new Log('payfort_fort.log');
+                            $log->write('Invalid response parameters.');
+                        }
                     }
                     else {
                         $params = $host2HostParams;
                         $signature = $host2HostParams['signature'];
-
                         unset($params['signature']);
                         unset($params['route']);
                         $trueSignature = $this->_calculateSignature($params, 'response');
                         if ($trueSignature != $signature){
                             $success = false;
+                            if ($this->config->get('payfort_fort_debug')) {
+                                $log = new Log('payfort_fort.log');
+                                $log->write(sprintf('Invalid Signature. Calculated Signature: %1s, Response Signature: %2s', $trueSignature, $signature));
+                            }
                         }
                         else{
                             $response_code      = $params['response_code'];
@@ -245,7 +264,7 @@ class ControllerPaymentPayfortFort extends Controller {
             'customer_name'         => trim($order_info['payment_firstname'].' '.$order_info['payment_lastname']),
             'token_name'            => $fortParams['token_name'],
             'language'              => $this->config->get('payfort_fort_entry_language'),
-            'return_url'            => $this->url->link('payment/payfort_fort/response'),
+            'return_url'            => $this->_getUrl('payment/payfort_fort/response'),
         );
         //calculate request signature
         $signature = $this->_calculateSignature($postData, 'request');
@@ -323,7 +342,7 @@ class ControllerPaymentPayfortFort extends Controller {
                 'merchant_reference'    => $order_id,
                 'service_command'       => 'TOKENIZATION',
                 'language'              => $this->config->get('payfort_fort_entry_language'),
-                'return_url'            => $this->url->link('payment/payfort_fort/merchantPageResponse'),
+                'return_url'            => $this->_getUrl('payment/payfort_fort/merchantPageResponse'),
             );
 
             //calculate request signature
@@ -480,6 +499,11 @@ class ControllerPaymentPayfortFort extends Controller {
             $decimal_points = $this->currency->getDecimalPlace();
             $new_amount = round($amount * $currency_value, $decimal_points) * (pow(10, $decimal_points));
             return $new_amount;
+        }
+        
+        private function _getUrl($path) {
+            $url = $this->url->link($path, '', 'SSL');
+            return $url;
         }
 }
 
