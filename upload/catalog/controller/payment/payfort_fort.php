@@ -142,7 +142,7 @@ class ControllerPaymentPayfortFort extends Controller {
         
         $json['form'] = $form;
         
-        $this->model_checkout_order->addOrderHistory($order_id, 1, 'Pending Payment', false);
+        //$this->model_checkout_order->addOrderHistory($order_id, 1, 'Pending Payment', false);
 
         $this->response->setOutput(json_encode($json));
 

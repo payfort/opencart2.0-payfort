@@ -85,7 +85,7 @@ class ControllerPaymentPayfortFortSadad extends Controller {
             'customer_email'        => $order_info['email'],
             'command'               => $this->config->get('payfort_fort_entry_command'),
             'language'              => $this->config->get('payfort_fort_entry_language'),
-            'return_url'            => $this->url->link('payment/payfort_fort/response'),
+            'return_url'            => $this->url->link('payment/payfort_fort/response', '', 'SSL'),
         );
         $postData['payment_option'] = 'SADAD';
 
@@ -121,7 +121,7 @@ class ControllerPaymentPayfortFortSadad extends Controller {
         
         $json['form'] = $form;
         
-        $this->model_checkout_order->addOrderHistory($order_id, 1, 'Pending Payment', false);
+        //$this->model_checkout_order->addOrderHistory($order_id, 1, 'Pending Payment', false);
 
         $this->response->setOutput(json_encode($json));
 
