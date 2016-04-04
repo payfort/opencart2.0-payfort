@@ -73,6 +73,12 @@ $('#button-confirm').bind('click', function () {
     $( "#payfort_payment_form" ).attr("action","<?php echo $merchant_page_data['url']?>");
     $( "#payfort_payment_form" ).attr("target","payfort_merchant_page");
     $( "#payfort_payment_form" ).submit();
+    //fix for touch devices
+    if (fn_payfort_fort_is_touch_device()) {
+        setTimeout(function() {
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+        }, 1);
+    }
     $( "#div-pf-iframe" ).show();
 });
 function pfClosePopup() {
@@ -84,6 +90,10 @@ function pfIframeLoaded(ele) {
     $('.pf-iframe-spin').hide();
     $('.pf-iframe-close').show();
     $('#payfort_merchant_page').show();
+}
+function fn_payfort_fort_is_touch_device() {
+  return 'ontouchstart' in window        // works on most browsers 
+      || navigator.maxTouchPoints;       // works on IE10/11 and Surface
 }
 //--></script>
 <?php endif; ?>

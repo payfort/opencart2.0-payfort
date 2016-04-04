@@ -496,7 +496,8 @@ class ControllerPaymentPayfortFort extends Controller {
          */
         private function _convertFortAmount($amount, $currency_value, $currency_code) {
             $new_amount = 0;
-            $decimal_points = $this->currency->getDecimalPlace();
+            //$decimal_points = $this->currency->getDecimalPlace();
+            $decimal_points = $this->getCurrencyDecimalPoints($currency_code);
             $new_amount = round($amount * $currency_value, $decimal_points) * (pow(10, $decimal_points));
             return $new_amount;
         }
@@ -504,6 +505,28 @@ class ControllerPaymentPayfortFort extends Controller {
         private function _getUrl($path) {
             $url = $this->url->link($path, '', 'SSL');
             return $url;
+        }
+        
+        /**
+         * 
+         * @param string $currency
+         * @param integer 
+         */
+        private function getCurrencyDecimalPoints($currency) {
+            $decimalPoint  = 2;
+            $arrCurrencies = array(
+                'JOD' => 3,
+                'KWD' => 3,
+                'OMR' => 3,
+                'TND' => 3,
+                'BHD' => 3,
+                'LYD' => 3,
+                'IQD' => 3,
+            );
+            if (isset($arrCurrencies[$currency])) {
+                $decimalPoint = $arrCurrencies[$currency];
+            }
+            return $decimalPoint;
         }
 }
 

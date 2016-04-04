@@ -2,6 +2,8 @@
 
 class ControllerPaymentPayfortFortQpay extends Controller {
 
+    private $_gatewayHost        = 'https://checkout.payfort.com/';
+    private $_gatewaySandboxHost = 'https://sbcheckout.payfort.com/';
     public function index() {
         $this->language->load('payment/payfort_fort');
         $data['button_confirm'] = $this->language->get('button_confirm');
@@ -77,7 +79,7 @@ class ControllerPaymentPayfortFortQpay extends Controller {
         $order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
         
         $postData = array(
-            'amount'                => round($order_info['total'] * $order_info['currency_value'],2) * 100,
+            'amount'                => $this->_convertFortAmount($order_info['total'], $order_info['currency_value'], $order_info['currency_code']),
             'currency'              => strtoupper($order_info['currency_code']),
             'merchant_identifier'   => $this->config->get('payfort_fort_entry_merchant_identifier'),
             'access_code'           => $this->config->get('payfort_fort_entry_access_code'),
@@ -85,29 +87,23 @@ class ControllerPaymentPayfortFortQpay extends Controller {
             'customer_email'        => $order_info['email'],
             'command'               => $this->config->get('payfort_fort_entry_command'),
             'language'              => $this->config->get('payfort_fort_entry_language'),
-            'return_url'            => $this->url->link('payment/payfort_fort/response', '', 'SSL'),
+            'return_url'            => $this->_getUrl('payment/payfort_fort/response'),
         );
         $postData['payment_option'] = 'NAPS';
         $postData['order_description'] = $order_id;
-        
-        $this->db->query("UPDATE `" . DB_PREFIX . "order` SET payment_method = 'NAPS', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
+
+        $this->db->query("UPDATE `" . DB_PREFIX . "order` SET payment_method = 'Credit / Debit Card', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
         
         
         //calculate request signature
-        $shaString = '';
-        ksort($postData);
-        foreach ($postData as $k=>$v){
-            $shaString .= "$k=$v";
-        }
-
-        $shaString = $this->config->get('payfort_fort_entry_request_sha_phrase') . $shaString . $this->config->get('payfort_fort_entry_request_sha_phrase');
-        $signature = hash($this->config->get('payfort_fort_entry_hash_algorithm') ,$shaString);
+        $signature = $this->_calculateSignature($postData, 'request');
+        $postData['signature'] = $signature;
         
         if ($this->config->get('payfort_fort_entry_sandbox_mode')){
-            $gatewayUrl = 'https://sbcheckout.payfort.com/FortAPI/paymentPage';
+            $gatewayUrl = $this->_gatewaySandboxHost.'FortAPI/paymentPage';
         }
         else{
-            $gatewayUrl = 'https://checkout.payfort.com/FortAPI/paymentPage';
+            $gatewayUrl = $this->_gatewayHost.'FortAPI/paymentPage';
         }
         
         $form =  '<form style="display:none" name="payfortpaymentform" id="payfortpaymentform" method="post" action="'.$gatewayUrl.'" id="form1" name="form1">';
@@ -116,7 +112,6 @@ class ControllerPaymentPayfortFortQpay extends Controller {
             $form .= '<input type="hidden" name="'.$k.'" value="'.$v.'">';
         }
         
-        $form .= '<input type="hidden" name="signature" value="'.$signature.'">';
         $form .= '<input type="submit" value="" id="submit" name="submit2">';
         
         $json = array();
@@ -219,5 +214,73 @@ class ControllerPaymentPayfortFortQpay extends Controller {
 			$this->response->setOutput($this->load->view('default/template/common/success.tpl', $data));
 		}
 	}
+        
+        /**
+         * calculate fort signature
+         * @param array $arr_data
+         * @param sting $sign_type request or response
+         * @return string fort signature
+         */
+        private function _calculateSignature($arr_data, $sign_type = 'request') {
+
+            $shaString = '';
+
+            ksort($arr_data);
+            foreach ($arr_data as $k=>$v){
+                $shaString .= "$k=$v";
+            }
+
+            if($sign_type == 'request') {
+                $shaString = $this->config->get('payfort_fort_entry_request_sha_phrase') . $shaString . $this->config->get('payfort_fort_entry_request_sha_phrase');
+            }
+            else{
+                $shaString = $this->config->get('payfort_fort_entry_response_sha_phrase') . $shaString . $this->config->get('payfort_fort_entry_response_sha_phrase');
+            }
+            $signature = hash($this->config->get('payfort_fort_entry_hash_algorithm') ,$shaString);
+
+            return $signature;
+        }
+        
+        /**
+         * Convert Amount with dicemal points
+         * @param decimal $amount
+         * @param decimal $currency_value
+         * @param string  $currency_code
+         * @return decimal
+         */
+        private function _convertFortAmount($amount, $currency_value, $currency_code) {
+            $new_amount = 0;
+            //$decimal_points = $this->currency->getDecimalPlace();
+            $decimal_points = $this->getCurrencyDecimalPoints($currency_code);
+            $new_amount = round($amount * $currency_value, $decimal_points) * (pow(10, $decimal_points));
+            return $new_amount;
+        }
+        
+        private function _getUrl($path) {
+            $url = $this->url->link($path, '', 'SSL');
+            return $url;
+        }
+        
+        /**
+         * 
+         * @param string $currency
+         * @param integer 
+         */
+        private function getCurrencyDecimalPoints($currency) {
+            $decimalPoint  = 2;
+            $arrCurrencies = array(
+                'JOD' => 3,
+                'KWD' => 3,
+                'OMR' => 3,
+                'TND' => 3,
+                'BHD' => 3,
+                'LYD' => 3,
+                'IQD' => 3,
+            );
+            if (isset($arrCurrencies[$currency])) {
+                $decimalPoint = $arrCurrencies[$currency];
+            }
+            return $decimalPoint;
+        }
 }
 
