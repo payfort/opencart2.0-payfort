@@ -285,7 +285,7 @@
             </div>
           </div>
             <?php $u = new Url('/');?>
-            <?php $s = 'http'.((empty($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off')?'':'s');?>
+            <?php $s = 'http'.((isset($_SERVER['HTTPS']) && (($_SERVER['HTTPS'] == 'on') || ($_SERVER['HTTPS'] == '1')))?'s':'');?>
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="">Host to Host URL:</label>
                 <div class="col-sm-10">
