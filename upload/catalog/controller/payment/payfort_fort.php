@@ -1,10 +1,27 @@
 <?php
 
+require_once DIR_SYSTEM . '/library/payfortFort/init.php';
+
 class ControllerPaymentPayfortFort extends Controller {
 
-    private $_gatewayHost        = 'https://checkout.payfort.com/';
-    private $_gatewaySandboxHost = 'https://sbcheckout.payfort.com/';
-    //private $_gatewaySandboxHost = 'https://checkout.fortstg.com/';
+    public $paymentMethod;
+    public $integrationType;
+    public $pfConfig;
+    public $pfPayment;
+    public $pfHelper;
+    public $pfOrder;
+
+    public function __construct($registry)
+    {
+        parent::__construct($registry);
+        $this->pfConfig        = Payfort_Fort_Config::getInstance();
+        $this->pfPayment       = Payfort_Fort_Payment::getInstance();
+        $this->pfHelper        = Payfort_Fort_Helper::getInstance();
+        $this->pfOrder         = new Payfort_Fort_Order();
+        $this->integrationType = $this->pfConfig->getCcIntegrationType();
+        $this->paymentMethod   = PAYFORT_FORT_PAYMENT_METHOD_CC;
+    }
+    
     public function index() {
         $this->language->load('payment/payfort_fort');
         $data['button_confirm'] = $this->language->get('button_confirm');
@@ -15,359 +32,114 @@ class ControllerPaymentPayfortFort extends Controller {
         //$data['text_save_credit_card_note'] = $this->language->get('text_save_credit_card_note');
         
         //$this->load->model('setting/setting');
-        $data['payfort_fort_cc_integration_type'] = $this->config->get('payfort_fort_cc_integration_type');
+        $data['payfort_fort_cc_integration_type'] = $this->integrationType;
         
-        $data['merchant_page_data'] = '';
-        if($this->config->get('payfort_fort_cc_integration_type') == 'merchantPage') {
-            $order_id = $this->session->data['order_id'];
-            $this->db->query("UPDATE `" . DB_PREFIX . "order` SET payment_method = 'Credit / Debit Card', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
-            $data['merchant_page_data'] = $this->getMerchantPageData();
+        $this->load->model('payment/payfort_fort');
+        $data['payment_request_params'] = '';
+        $template = 'payfort_fort.tpl';
+        if ($this->pfConfig->isCcMerchantPage()) {
+            $template                             = 'payfort_fort_merchant_page.tpl';
+            $data['payment_request_params'] = $this->pfPayment->getPaymentRequestParams($this->paymentMethod, $this->integrationType);
             //$this->model_checkout_order->addOrderHistory($order_id, 1, 'Pending Payment', false);
         }
+         elseif ($this->pfConfig->isCcMerchantPage2()) {
+            $template                             = 'payfort_fort_merchant_page2.tpl';
+            $data['payment_request_params'] = $this->pfPayment->getPaymentRequestParams($this->paymentMethod, $this->integrationType);
+            
+            $data['text_credit_card'] = $this->language->get('text_credit_card');
+            $data['text_card_holder_name'] = $this->language->get('text_card_holder_name');
+            $data['text_card_number'] = $this->language->get('text_card_number');
+            $data['text_expiry_date'] = $this->language->get('text_expiry_date');
+            $data['text_cvc_code'] = $this->language->get('text_cvc_code');
+            $data['help_cvc_code'] = $this->language->get('help_cvc_code');
+            
+            $arr_js_messages = 
+                    array(
+                        'error_invalid_card_number' => $this->language->get('error_invalid_card_number'),
+                        'error_invalid_card_holder_name' => $this->language->get('error_invalid_card_holder_name'),
+                        'error_invalid_expiry_date' => $this->language->get('error_invalid_expiry_date'),
+                        'error_invalid_cvc_code' => $this->language->get('error_invalid_cvc_code'),
+                        'error_invalid_cc_details' => $this->language->get('error_invalid_cc_details'),
+                    );
+                    
+            $data['arr_js_messages'] = $this->pfHelper->loadJsMessages($arr_js_messages);
+            $data['months'] = array();
+
+            for ($i = 1; $i <= 12; $i++) {
+                    $data['months'][] = array(
+                            'text'  => strftime('%B', mktime(0, 0, 0, $i, 1, 2000)), 
+                            'value' => sprintf('%02d', $i)
+                    );
+            }
+
+            $today = getdate();
+
+            $data['year_expire'] = array();
+
+            for ($i = $today['year']; $i < $today['year'] + 11; $i++) {
+                    $data['year_expire'][] = array(
+                            'text'  => strftime('%Y', mktime(0, 0, 0, 1, 1, $i)),
+                            'value' => strftime('%y', mktime(0, 0, 0, 1, 1, $i)) 
+                    );
+            }
+        }
         
-        if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/payfort_fort.tpl')) {
-            $this->template = $this->config->get('config_template') . '/template/payment/payfort_fort.tpl';
+        if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/' . $template)) {
+            $this->template = $this->config->get('config_template') . '/template/payment/' . $template;
         } else {
-            $this->template = 'default/template/payment/payfort_fort.tpl';
+            $this->template = 'default/template/payment/' . $template;
         }
         return $this->load->view($this->template, $data);
-
     }
     
-    public function response(){
-        $fortParams = array_merge($_GET,$_POST); //never use $_REQUEST, it might include PUT .. etc
+    public function send()
+    {
+        $form = $this->pfPayment->getPaymentRequestForm($this->paymentMethod);
         
-        if ($this->config->get('payfort_fort_debug')) {
-            $log = new Log('payfort_fort.log');
-            $log->write(print_r($fortParams, 1));
-        }
-        
-        if (isset($fortParams['response_code']) && isset($fortParams['merchant_reference'])){
-            $this->language->load('payment/payfort_fort');
-            $this->load->model('checkout/order');
-            $order_id = $fortParams['merchant_reference'];
-            $order_info = $this->model_checkout_order->getOrder($order_id);
-            $success = false;
-            $params = $fortParams;
-            $signature = $fortParams['signature'];
-            
-            unset($params['signature']);
-            unset($params['route']);
-            $trueSignature = $this->_calculateSignature($params, 'response');
-            if ($trueSignature != $signature){
-                $success = false;
-                if ($this->config->get('payfort_fort_debug')) {
-                    $log = new Log('payfort_fort.log');
-                    $log->write(sprintf('Invalid Signature. Calculated Signature: %1s, Response Signature: %2s', $trueSignature, $signature));
-                }
-            }
-            else{
-                $response_code      = $params['response_code'];
-                $response_message   = $params['response_message'];
-                $status             = $params['status'];
-                
-                if (substr($response_code, 2) != '000'){
-
-                }
-                else{
-                    $success = true;
-                    $this->model_checkout_order->addOrderHistory($order_id, $this->config->get('payfort_fort_order_status_id'), 'Paid: ' . $order_id, false);
-                    if($this->config->get('payfort_fort_cc_integration_type') == 'merchantPage') {
-                        echo '<script>window.top.location.href = "'.$this->url->link('payment/payfort_fort/success').'"</script>';
-                        exit;
-                    }
-                    else {
-                        header('location:'.$this->url->link('payment/payfort_fort/success'));
-                    }
-                }
-            }
-            
-            if (!$success){
-                //$this->model_checkout_order->confirm($order_id, 10, 'Payment Error', false);
-                $this->model_checkout_order->addOrderHistory($order_id, 10, 'Payment Failed', false);
-                $this->session->data['error'] = $this->language->get('text_payment_failed').$params['response_message'];
-                if($this->config->get('payfort_fort_cc_integration_type') == 'merchantPage') {
-                    echo '<script>window.top.location.href = "'.$this->url->link('checkout/checkout').'"</script>';
-                    exit;
-                }
-                else {
-                    header('location:'.$this->url->link('checkout/checkout'));
-                }                
-            }
-        }
-    }
-    
-    public function send() {
-
-        $this->load->model('checkout/order');
-        $order_id = $this->session->data['order_id'];
-        $order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
-        
-        $postData = array(
-            'amount'                => $this->_convertFortAmount($order_info['total'], $order_info['currency_value'], $order_info['currency_code']),
-            'currency'              => strtoupper($order_info['currency_code']),
-            'merchant_identifier'   => $this->config->get('payfort_fort_entry_merchant_identifier'),
-            'access_code'           => $this->config->get('payfort_fort_entry_access_code'),
-            'merchant_reference'    => $order_id,
-            'customer_email'        => $order_info['email'],
-            'command'               => $this->config->get('payfort_fort_entry_command'),
-            'language'              => $this->config->get('payfort_fort_entry_language'),
-            'return_url'            => $this->_getUrl('payment/payfort_fort/response'),
-        );
-        
-
-        $this->db->query("UPDATE `" . DB_PREFIX . "order` SET payment_method = 'Credit / Debit Card', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
-        
-        
-        //calculate request signature
-        $signature = $this->_calculateSignature($postData, 'request');
-        $postData['signature'] = $signature;
-        
-        if ($this->config->get('payfort_fort_entry_sandbox_mode')){
-            $gatewayUrl = $this->_gatewaySandboxHost.'FortAPI/paymentPage';
-        }
-        else{
-            $gatewayUrl = $this->_gatewayHost.'FortAPI/paymentPage';
-        }
-        
-        $form =  '<form style="display:none" name="payfortpaymentform" id="payfortpaymentform" method="post" action="'.$gatewayUrl.'" id="form1" name="form1">';
-        
-        foreach ($postData as $k => $v){
-            $form .= '<input type="hidden" name="'.$k.'" value="'.$v.'">';
-        }
-        
-        $form .= '<input type="submit" value="" id="submit" name="submit2">';
-        
-        $json = array();
-        
-        $json['form'] = $form;
-        
-        //$this->model_checkout_order->addOrderHistory($order_id, 1, 'Pending Payment', false);
-
+        $json = array('form' => $form);
         $this->response->setOutput(json_encode($json));
-
     }
     
-    public function merchantPageResponse(){
-        $fortParams = array_merge($_GET,$_POST); //never use $_REQUEST, it might include PUT .. etc
-        
-        if ($this->config->get('payfort_fort_debug')) {
-            $log = new Log('payfort_fort.log');
-            $log->write(print_r($fortParams, 1));
-        }
-        
-        if (isset($fortParams['response_code']) && isset($fortParams['merchant_reference'])){
-            $this->language->load('payment/payfort_fort');
-            $this->load->model('checkout/order');
-            $order_id = $fortParams['merchant_reference'];
-            $order_info = $this->model_checkout_order->getOrder($order_id);
-            $success = false;
-            $params = $fortParams;
-            $signature = $fortParams['signature'];
-            
-            unset($params['signature']);
-            unset($params['route']);
-            $trueSignature = $this->_calculateSignature($params, 'response');
-            if ($trueSignature != $signature){
-                $success = false;
-                if ($this->config->get('payfort_fort_debug')) {
-                    $log = new Log('payfort_fort.log');
-                    $log->write(sprintf('Invalid Signature. Calculated Signature: %1s, Response Signature: %2s', $trueSignature, $signature));
-                }
-            }
-            else{
-                $response_code      = $params['response_code'];
-                $response_message   = $params['response_message'];
-                $status             = $params['status'];
-                
-                if (substr($response_code, 2) != '000'){
-                    $success = false;
-                }
-                else{
-                    $success = true;
-                    $host2HostParams = $this->merchantPageNotifyFort($fortParams);
-                    if ($this->config->get('payfort_fort_debug')) {
-                        $log = new Log('payfort_fort.log');
-                        $log->write(print_r($host2HostParams, 1));
-                    }
-                    if(!$host2HostParams) {
-                        $success = false;
-                        if ($this->config->get('payfort_fort_debug')) {
-                            $log = new Log('payfort_fort.log');
-                            $log->write('Invalid response parameters.');
-                        }
-                    }
-                    else {
-                        $params = $host2HostParams;
-                        $signature = $host2HostParams['signature'];
-                        unset($params['signature']);
-                        unset($params['route']);
-                        $trueSignature = $this->_calculateSignature($params, 'response');
-                        if ($trueSignature != $signature){
-                            $success = false;
-                            if ($this->config->get('payfort_fort_debug')) {
-                                $log = new Log('payfort_fort.log');
-                                $log->write(sprintf('Invalid Signature. Calculated Signature: %1s, Response Signature: %2s', $trueSignature, $signature));
-                            }
-                        }
-                        else{
-                            $response_code      = $params['response_code'];
-                            
-                            if($response_code == '20064' && isset($params['3ds_url'])) {
-                                //redirect to 3ds page
-                                $success = true;
-                                header('location:'.$params['3ds_url']);
-                                exit;
-                            }
-                            else{
-                                if (substr($response_code, 2) != '000'){
-                                    $success = false;
-                                }
-                                if($success) {
-                                    $success = true;
-                                    $this->model_checkout_order->addOrderHistory($order_id, $this->config->get('payfort_fort_order_status_id'), 'Paid: ' . $order_id, false);
-                                    echo '<script>window.top.location.href = "'.$this->url->link('payment/payfort_fort/success').'"</script>';
-                                    exit;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            
-            if (!$success){
-                //$this->model_checkout_order->confirm($order_id, 10, 'Payment Error', false);
-                $this->model_checkout_order->addOrderHistory($order_id, 10, 'Payment Failed', false);
-                $this->session->data['error'] = $this->language->get('text_payment_failed').$params['response_message'];
-                echo '<script>window.top.location.href = "'.$this->url->link('checkout/checkout').'"</script>';
-                exit;
-            }
-        }
+    public function response()
+    {
+        $this->_handleResponse('offline');
+    }
+
+    public function responseOnline()
+    {
+
+        $this->_handleResponse('online');
+    }
+
+    public function merchantPageResponse()
+    {
+        $this->_handleResponse('online', $this->integrationType);
     }
     
-    private function merchantPageNotifyFort($fortParams) {
-        //send host to host
-        
-        $this->load->model('checkout/order');
-        $order_id = $this->session->data['order_id'];
-        $order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
-        
-        $postData = array(
-            'merchant_reference'    => $fortParams['merchant_reference'],
-            'access_code'           => $this->config->get('payfort_fort_entry_access_code'),
-            'command'               => $this->config->get('payfort_fort_entry_command'),
-            'merchant_identifier'   => $this->config->get('payfort_fort_entry_merchant_identifier'),
-            'customer_ip'           => $this->request->server['REMOTE_ADDR'],
-            'amount'                => $this->_convertFortAmount($order_info['total'], $order_info['currency_value'], $order_info['currency_code']),
-            'currency'              => strtoupper($order_info['currency_code']),
-            'customer_email'        => $order_info['email'],
-            'customer_name'         => trim($order_info['payment_firstname'].' '.$order_info['payment_lastname']),
-            'token_name'            => $fortParams['token_name'],
-            'language'              => $this->config->get('payfort_fort_entry_language'),
-            'return_url'            => $this->_getUrl('payment/payfort_fort/response'),
-        );
-        //calculate request signature
-        $signature = $this->_calculateSignature($postData, 'request');
-        $postData['signature'] = $signature;
-        
-        if ($this->config->get('payfort_fort_debug')) {
-            $log = new Log('payfort_fort.log');
-            $log->write(print_r($postData, 1));
-        }
-        
-        if ($this->config->get('payfort_fort_entry_sandbox_mode')){
-            $gatewayUrl = $this->_gatewaySandboxHost.'FortAPI/paymentApi';
-        }
-        else{
-            $gatewayUrl = $this->_gatewayHost.'FortAPI/paymentApi';
-        }
-        //open connection
-        $ch = curl_init();
-        
-        //set the url, number of POST vars, POST data
-        $useragent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:20.0) Gecko/20100101 Firefox/20.0";
-        curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type: application/json;charset=UTF-8',
-                //'Accept: application/json, application/*+json',
-                //'Connection:keep-alive'
-        ));
-        curl_setopt($ch, CURLOPT_URL, $gatewayUrl);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_FAILONERROR, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_ENCODING, "compress, gzip");
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); // allow redirects		
-        //curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // return into a variable
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0); // The number of seconds to wait while trying to connect
-        //curl_setopt($ch, CURLOPT_TIMEOUT, Yii::app()->params['apiCallTimeout']); // timeout in seconds
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
+    private function _handleResponse($response_mode = 'online', $integration_type = PAYFORT_FORT_INTEGRATION_TYPE_REDIRECTION)
+    {
+        $response_params = array_merge($this->request->get, $this->request->post); //never use $_REQUEST, it might include PUT .. etc
 
-        $response = curl_exec($ch);
-        
-        $response_data = array();
-
-        //parse_str($response, $response_data);
-        curl_close($ch);
-            
-        
-        $array_result    = json_decode($response, true);
-        
-        if ($this->config->get('payfort_fort_debug')) {
-            $log = new Log('payfort_fort.log');
-            $log->write(print_r($array_result, 1));
+        $success = $this->pfPayment->handleFortResponse($response_params, $response_mode, $integration_type);
+        if ($success) {
+            $redirectUrl = 'payment/payfort_fort/success';
         }
-        
-        if(!$response || empty($array_result)) {
-            return false;
+        else {
+            $redirectUrl = 'checkout/checkout';
         }
-        return $array_result;
+        if ($this->pfConfig->isCcMerchantPage()) {
+            echo '<script>window.top.location.href = "' . $this->url->link($redirectUrl) . '"</script>';
+            exit;
+        }
+        else {
+            header('location:' . $this->url->link($redirectUrl));
+        }
     }
-    
-    
-    
-    private function getMerchantPageData() {
-            $this->language->load('payment/payfort_fort');
-            $this->load->model('checkout/order');
-            //$this->load->model('payment/pp_pro_iframe');
-            $order_id = $this->session->data['order_id'];
-            
-            $order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
-            
-            $iframe_params = array(
-                'merchant_identifier'   => $this->config->get('payfort_fort_entry_merchant_identifier'),
-                'access_code'           => $this->config->get('payfort_fort_entry_access_code'),
-                'merchant_reference'    => $order_id,
-                'service_command'       => 'TOKENIZATION',
-                'language'              => $this->config->get('payfort_fort_entry_language'),
-                'return_url'            => $this->_getUrl('payment/payfort_fort/merchantPageResponse'),
-            );
 
-            //calculate request signature
-            $signature = $this->_calculateSignature($iframe_params, 'request');
-            $iframe_params['signature'] = $signature;
-            
-            if ($this->config->get('payfort_fort_entry_sandbox_mode')) {
-                    $fort_url = $this->_gatewaySandboxHost.'FortAPI/paymentPage';
-            } else {
-                    $fort_url = $this->_gatewayHost.'FortAPI/paymentPage';
-            }
-            
-            $merchant_page_url = $fort_url;
-            
-            return array('url' => $fort_url, 'params' => $iframe_params);
-    }
-    
-    public function merchantPageCancel() {
-        $this->language->load('payment/payfort_fort');
-        $this->load->model('checkout/order');
-        //$order_id = $this->session->data['order_id'];
-        //$order_info = $this->model_checkout_order->getOrder($order_id);
-        //$this->model_checkout_order->addOrderHistory($order_id, 7, 'Payment Canceled', false);
-        $this->session->data['error'] = $this->language->get('text_payment_canceled');
-        header('location:'.$this->url->link('checkout/checkout'));
+    public function merchantPageCancel()
+    {
+        $this->pfPayment->merchantPageCancel();
+        header('location:' . $this->url->link('checkout/checkout'));
     }
     
     public function success() {
@@ -460,73 +232,5 @@ class ControllerPaymentPayfortFort extends Controller {
 			$this->response->setOutput($this->load->view('default/template/common/success.tpl', $data));
 		}
 	}
-    
-        /**
-         * calculate fort signature
-         * @param array $arr_data
-         * @param sting $sign_type request or response
-         * @return string fort signature
-         */
-        private function _calculateSignature($arr_data, $sign_type = 'request') {
-
-            $shaString = '';
-
-            ksort($arr_data);
-            foreach ($arr_data as $k=>$v){
-                $shaString .= "$k=$v";
-            }
-
-            if($sign_type == 'request') {
-                $shaString = $this->config->get('payfort_fort_entry_request_sha_phrase') . $shaString . $this->config->get('payfort_fort_entry_request_sha_phrase');
-            }
-            else{
-                $shaString = $this->config->get('payfort_fort_entry_response_sha_phrase') . $shaString . $this->config->get('payfort_fort_entry_response_sha_phrase');
-            }
-            $signature = hash($this->config->get('payfort_fort_entry_hash_algorithm') ,$shaString);
-
-            return $signature;
-        }
-        
-        /**
-         * Convert Amount with dicemal points
-         * @param decimal $amount
-         * @param decimal $currency_value
-         * @param string  $currency_code
-         * @return decimal
-         */
-        private function _convertFortAmount($amount, $currency_value, $currency_code) {
-            $new_amount = 0;
-            //$decimal_points = $this->currency->getDecimalPlace();
-            $decimal_points = $this->getCurrencyDecimalPoints($currency_code);
-            $new_amount = round($amount * $currency_value, $decimal_points) * (pow(10, $decimal_points));
-            return $new_amount;
-        }
-        
-        private function _getUrl($path) {
-            $url = $this->url->link($path, '', 'SSL');
-            return $url;
-        }
-        
-        /**
-         * 
-         * @param string $currency
-         * @param integer 
-         */
-        private function getCurrencyDecimalPoints($currency) {
-            $decimalPoint  = 2;
-            $arrCurrencies = array(
-                'JOD' => 3,
-                'KWD' => 3,
-                'OMR' => 3,
-                'TND' => 3,
-                'BHD' => 3,
-                'LYD' => 3,
-                'IQD' => 3,
-            );
-            if (isset($arrCurrencies[$currency])) {
-                $decimalPoint = $arrCurrencies[$currency];
-            }
-            return $decimalPoint;
-        }
 }
 

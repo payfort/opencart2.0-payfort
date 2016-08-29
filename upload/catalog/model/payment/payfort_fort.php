@@ -1,28 +1,45 @@
-<?php 
-class ModelPaymentPayfortFort extends Model {
-	public function getMethod($address, $total) {
-		$this->language->load('payment/payfort_fort');
-                $credit_card_enabled = $this->config->get('payfort_fort_credit_card');
+<?php
 
-                $status = true;
-                
-                if(!$credit_card_enabled) {
-                    $status = false;
-                }
-                
-                $method_data = array();
-                
-                if($status) {
-                    $method_data = array(
-                            'code'       => 'payfort_fort',
-                            'title'      => $this->language->get('text_title') ,
-                            'sort_order' => $this->config->get('payfort_fort_sort_order'),
-                            'terms'      => ''
-                    );
+require_once DIR_SYSTEM . '/library/payfortFort/init.php';
 
-                }
-                
-                return $method_data;
-	}
+class ModelPaymentPayfortFort extends Model
+{
+
+    public $pfConfig;
+    public $pfHelper;
+
+    public function __construct($registry)
+    {
+        parent::__construct($registry);
+        $this->pfConfig = Payfort_Fort_Config::getInstance();
+        $this->pfHelper = Payfort_Fort_Helper::getInstance();
+    }
+
+    public function getMethod($address, $total)
+    {
+        $this->language->load('payment/payfort_fort');
+        $enabled = $this->pfConfig->isCcActive();
+
+        $status = true;
+
+        if (!$enabled) {
+            $status = false;
+        }
+
+        $method_data = array();
+
+        if ($status) {
+            $method_data = array(
+                'code'       => PAYFORT_FORT_PAYMENT_METHOD_CC,
+                'title'      => $this->language->get('text_title'),
+                'sort_order' => $this->config->get('payfort_fort_sort_order'),
+                'terms'      => ''
+            );
+        }
+
+        return $method_data;
+    }
+
 }
+
 ?>
