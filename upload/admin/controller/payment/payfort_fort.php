@@ -60,17 +60,35 @@ class ControllerPaymentPayfortFort extends Controller {
         $data['entry_cc_integration_type'] = $this->language->get('entry_cc_integration_type');
         $data['help_cc_integration_type'] = $this->language->get('help_cc_integration_type');
         $data['text_merchant_page'] = $this->language->get('text_merchant_page');
+        $data['text_merchant_page2'] = $this->language->get('text_merchant_page2');
         $data['text_redirection'] = $this->language->get('text_redirection');
         $data['text_yes'] = $this->language->get('text_yes');
         $data['text_no'] = $this->language->get('text_no');
         $data['entry_debug'] = $this->language->get('entry_debug');
         $data['help_debug'] = $this->language->get('help_debug');
+        $data['entry_gateway_currency'] = $this->language->get('entry_gateway_currency');
+        $data['text_base_currency'] = $this->language->get('text_base_currency');
+        $data['text_front_currency'] = $this->language->get('text_front_currency');
+        $data['help_gateway_currency'] = $this->language->get('help_gateway_currency');
+        $data['text_store_language'] = $this->language->get('text_store_language');
                 
         $data['button_save'] = $this->language->get('button_save');
         $data['button_cancel'] = $this->language->get('button_cancel');
         
+        $data['tab_general'] = $this->language->get('tab_general');
+        $data['tab_credit_card'] = $this->language->get('tab_credit_card');
+        $data['tab_sadad'] = $this->language->get('tab_sadad');
+        $data['tab_naps'] = $this->language->get('tab_naps');
         
-
+        $data['entry_order_placement'] = $this->language->get('entry_order_placement');
+        $data['help_order_placement'] = $this->language->get('help_order_placement');
+        $data['text_on_success'] = $this->language->get('text_on_success');
+        $data['text_always'] = $this->language->get('text_always');
+        
+        $url = new Url(HTTP_CATALOG, $this->config->get('config_secure') ? HTTPS_CATALOG : HTTP_CATALOG);
+        $host_to_host_url = $url->link('payment/payfort_fort/response', '', 'SSL');
+        $data['host_to_host_url'] = $host_to_host_url;
+        
         if (isset($this->error['warning'])) {
             $data['error_warning'] = $this->error['warning'];
         } else {
@@ -187,12 +205,24 @@ class ControllerPaymentPayfortFort extends Controller {
             $data['payfort_fort_order_status_id'] = $this->config->get('payfort_fort_order_status_id');
         }
         
+        if (isset($this->request->post['payfort_fort_entry_gateway_currency'])) {
+            $data['payfort_fort_entry_gateway_currency'] = $this->request->post['payfort_fort_entry_gateway_currency'];
+        } else {
+            $data['payfort_fort_entry_gateway_currency'] = $this->config->get('payfort_fort_entry_gateway_currency');
+        }
+        
         if (isset($this->request->post['payfort_fort_debug'])) {
                 $data['payfort_fort_debug'] = $this->request->post['payfort_fort_debug'];
         } else {
                 $data['payfort_fort_debug'] = $this->config->get('payfort_fort_debug');
         }
 
+        if (isset($this->request->post['payfort_fort_order_placement'])) {
+            $data['payfort_fort_order_placement'] = $this->request->post['payfort_fort_order_placement'];
+        } else {
+            $data['payfort_fort_order_placement'] = $this->config->get('payfort_fort_order_placement');
+        }
+        
         $this->load->model('localisation/order_status');
 
         $data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
@@ -232,7 +262,20 @@ class ControllerPaymentPayfortFort extends Controller {
         } else {
             $data['payfort_fort_sort_order'] = $this->config->get('payfort_fort_sort_order');
         }
-
+        
+        
+        if (isset($this->request->post['payfort_fort_sadad_sort_order'])) {
+            $data['payfort_fort_sadad_sort_order'] = $this->request->post['payfort_fort_sadad_sort_order'];
+        } else {
+            $data['payfort_fort_sadad_sort_order'] = $this->config->get('payfort_fort_sadad_sort_order');
+        }
+        
+        if (isset($this->request->post['payfort_fort_qpay_sort_order'])) {
+            $data['payfort_fort_qpay_sort_order'] = $this->request->post['payfort_fort_qpay_sort_order'];
+        } else {
+            $data['payfort_fort_qpay_sort_order'] = $this->config->get('payfort_fort_qpay_sort_order');
+        }
+        
         $this->template = 'payment/payfort_fort.tpl';
         
         $data['header'] = $this->load->controller('common/header');
@@ -294,7 +337,12 @@ class ControllerPaymentPayfortFort extends Controller {
             $newPost = array();
             foreach($post as $key => $value) {
                 $newstr = substr_replace($key, '_'.$code, strlen('payfort_fort'), 0);
-                $newPost[$newstr] = $value; 
+                if(isset($this->request->post[$newstr])) {
+                    $newPost[$newstr] = $this->request->post[$newstr]; 
+                }
+                else{
+                    $newPost[$newstr] = $value; 
+                }
             }
             return $newPost;
     }

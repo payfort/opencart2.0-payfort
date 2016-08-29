@@ -20,7 +20,7 @@ $('#button-confirm').bind('click', function () {
 
                 if (json['form']) {
                     $('body').append(json['form']);
-                    $('#payfortpaymentform input[type=submit]').click();
+                    $('#frm_payfort_fort_payment input[type=submit]').click();
                 }
                 
                 else{
