@@ -237,7 +237,8 @@ class Payfort_Fort_Payment
             'language'            => $language,
             'return_url'          => $this->pfHelper->getReturnUrl('responseOnline')
         );
-        if (!empty($this->pfOrder->getCustomerName())) {
+        $customerName = $this->pfOrder->getCustomerName();
+        if (!empty($customerName)) {
             $postData['customer_name'] = $this->pfOrder->getCustomerName();
         }
         //calculate request signature
