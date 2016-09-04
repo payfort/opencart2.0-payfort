@@ -42,7 +42,7 @@ class Payfort_Fort_Config
     {
         $this->registry = Payfort_Fort_Util::getRegistry();
 
-        $this->gatewayHost        = 'https://checkout.payfort.com/';
+        $this->gatewayProdHost    = 'https://checkout.payfort.com/';
         $this->gatewaySandboxHost = 'https://sbcheckout.payfort.com/';
         $this->logFileDir         = 'payfort_fort.log';
 
