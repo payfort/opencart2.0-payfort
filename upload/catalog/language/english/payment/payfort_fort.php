@@ -29,7 +29,7 @@ $_['error_transaction_error_1'] = 'An error occurred while making the transactio
 $_['error_transaction_error_2'] = 'An error occurred while making the transaction. Please try again. (Error message: %s)';
 $_['error_response_unknown'] = 'Response Unknown';
 
-$_['text_card_number'] = 'Card Numebr';
+$_['text_card_number'] = 'Card Number';
 $_['text_card_holder_name'] = 'Card Holder Name';
 $_['text_expiry_date'] = 'Expiry Date';
 $_['text_cvc_code'] = 'CVC Code';
