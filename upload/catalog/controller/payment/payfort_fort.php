@@ -84,10 +84,15 @@ class ControllerPaymentPayfortFort extends Controller {
             }
         }
         
-        if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/' . $template)) {
-            $this->template = $this->config->get('config_template') . '/template/payment/' . $template;
-        } else {
-            $this->template = 'default/template/payment/' . $template;
+        if (version_compare(VERSION, '2.2.0.0') >= 0) {
+            $this->template = 'payment/'.$template;
+        }
+        else {
+            if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/' . $template)) {
+                $this->template = $this->config->get('config_template') . '/template/payment/' . $template;
+            } else {
+                $this->template = 'default/template/payment/' . $template;
+            }
         }
         return $this->load->view($this->template, $data);
     }
