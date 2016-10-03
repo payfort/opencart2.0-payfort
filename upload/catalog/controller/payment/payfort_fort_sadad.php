@@ -23,10 +23,15 @@ class ControllerPaymentPayfortFortSadad extends Controller {
         $data['text_general_error']  = $this->language->get('text_general_error');
         $data['text_error_card_decline'] = $this->language->get('text_error_card_decline');
         
-        if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/payfort_fort_sadad.tpl')) {
-            $this->template = $this->config->get('config_template') . '/template/payment/payfort_fort_sadad.tpl';
-        } else {
-            $this->template = 'default/template/payment/payfort_fort_sadad.tpl';
+        if (version_compare(VERSION, '2.2.0.0') >= 0) {
+            $this->template = 'payment/payfort_fort_sadad.tpl';
+        }
+        else{
+            if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/payfort_fort_sadad.tpl')) {
+                $this->template = $this->config->get('config_template') . '/template/payment/payfort_fort_sadad.tpl';
+            } else {
+                $this->template = 'default/template/payment/payfort_fort_sadad.tpl';
+            }
         }
         return $this->load->view($this->template, $data);
 
