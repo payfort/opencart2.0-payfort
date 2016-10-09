@@ -6,10 +6,10 @@ class Payfort_Fort_Order
     private $order = array();
     private $pfConfig;
 
-    public function __construct()
+    public function __construct($registry)
     {
-        $this->registry = Payfort_Fort_Util::getRegistry();
-        $this->pfConfig = Payfort_Fort_Config::getInstance();
+        $this->registry = $registry;
+        $this->pfConfig = Payfort_Fort_Config::getInstance($registry);
     }
 
     public function loadOrder($orderId)

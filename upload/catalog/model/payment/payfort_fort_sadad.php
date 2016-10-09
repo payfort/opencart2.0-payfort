@@ -11,8 +11,8 @@ class ModelPaymentPayfortFortSadad extends Model
     public function __construct($registry)
     {
         parent::__construct($registry);
-        $this->pfConfig = Payfort_Fort_Config::getInstance();
-        $this->pfHelper = Payfort_Fort_Helper::getInstance();
+        $this->pfConfig = Payfort_Fort_Config::getInstance($registry);
+        $this->pfHelper = Payfort_Fort_Helper::getInstance($registry);
     }
 
     public function getMethod($address, $total)

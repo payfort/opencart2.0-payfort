@@ -3,15 +3,15 @@
 class Payfort_Fort_Language
 {
     
-    public static function __($input, $args = array(), $domain = 'payment/payfort_fort')
+    public static function __($registry, $input, $args = array(), $domain = 'payment/payfort_fort')
     {        
-        Payfort_Fort_Util::getRegistry()->get('language')->load($domain);
-        return Payfort_Fort_Util::getRegistry()->get('language')->get($input);
+        $registry->get('language')->load($domain);
+        return $registry->get('language')->get($input);
     }
 
-    public static function getCurrentLanguageCode() 
+    public static function getCurrentLanguageCode($registry) 
     {
-        return Payfort_Fort_Util::getRegistry()->get('language')->get('code');
+        return $registry->get('language')->get('code');
     }
 }
 

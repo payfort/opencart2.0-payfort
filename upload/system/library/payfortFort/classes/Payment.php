@@ -6,21 +6,23 @@ class Payfort_Fort_Payment
     private $pfHelper;
     private $pfConfig;
     private $pfOrder;
+    private $registry;
 
-    public function __construct()
+    public function __construct($registry)
     {
-        $this->pfHelper   = Payfort_Fort_Helper::getInstance();
-        $this->pfConfig   = Payfort_Fort_Config::getInstance();
-        $this->pfOrder    = new Payfort_Fort_Order();
+        $this->pfHelper   = Payfort_Fort_Helper::getInstance($registry);
+        $this->pfConfig   = Payfort_Fort_Config::getInstance($registry);
+        $this->pfOrder    = new Payfort_Fort_Order($registry);
+        $this->registry   = $registry;
     }
 
     /**
      * @return Payfort_Fort_Config
      */
-    public static function getInstance()
+    public static function getInstance($registry)
     {
         if (self::$instance === null) {
-            self::$instance = new Payfort_Fort_Payment();
+            self::$instance = new Payfort_Fort_Payment($registry);
         }
         return self::$instance;
     }
@@ -90,7 +92,7 @@ class Payfort_Fort_Payment
         try {
             $responseParams  = $fortParams;
             $success         = false;
-            $responseMessage = Payfort_Fort_Language::__('error_transaction_error_1');
+            $responseMessage = Payfort_Fort_Language::__($this->registry, 'error_transaction_error_1');
             //$this->session->data['error'] = Payfort_Fort_Language::__('text_payment_failed').$params['response_message'];
             if (empty($responseParams)) {
                 $this->pfHelper->log('Invalid fort response parameters (' . $responseMode . ')');
@@ -126,7 +128,7 @@ class Payfort_Fort_Payment
             $responseSignature = $this->pfHelper->calculateSignature($responseGatewayParams, 'response');
             // check the signature
             if (strtolower($responseSignature) !== strtolower($signature)) {
-                $responseMessage = Payfort_Fort_Language::__('error_invalid_signature');
+                $responseMessage = Payfort_Fort_Language::__($this->registry, 'error_invalid_signature');
                 $this->pfHelper->log(sprintf('Invalid Signature. Calculated Signature: %1s, Response Signature: %2s', $signature, $responseSignature));
                 // There is a problem in the response we got
                 if ($responseMode == 'offline') {
@@ -164,7 +166,7 @@ class Payfort_Fort_Payment
                 }
             }
             if ($responseStatus == '01') {
-                $responseMessage = Payfort_Fort_Language::__('text_payment_canceled');
+                $responseMessage = Payfort_Fort_Language::__($this->registry, 'text_payment_canceled');
                 if ($responseMode == 'offline') {
                     $r = $this->pfOrder->cancelOrder();
                     if ($r) {
@@ -176,7 +178,7 @@ class Payfort_Fort_Payment
                 }
             }
             if (substr($responseCode, 2) != '000') {
-                $responseMessage = sprintf(Payfort_Fort_Language::__('error_transaction_error_2'), $responseStatusMessage);
+                $responseMessage = sprintf(Payfort_Fort_Language::__($this->registry, 'error_transaction_error_2'), $responseStatusMessage);
                 if ($responseMode == 'offline') {
                     $r = $this->pfOrder->declineOrder();
                     if ($r) {
@@ -197,7 +199,7 @@ class Payfort_Fort_Payment
                 }
             }
             else {
-                $responseMessage = sprintf(Payfort_Fort_Language::__('error_transaction_error_2'), Payfort_Fort_Language::__('error_response_unknown'));
+                $responseMessage = sprintf(Payfort_Fort_Language::__($this->registry, 'error_transaction_error_2'), Payfort_Fort_Language::__($this->registry, 'error_response_unknown'));
                 if ($responseMode == 'offline') {
                     $r = $this->pfOrder->declineOrder();
                     if ($r) {
@@ -261,7 +263,7 @@ class Payfort_Fort_Payment
         if ($orderId) {
             $this->pfOrder->cancelOrder();
         }
-        $this->pfHelper->setFlashMsg(Payfort_Fort_Language::__('text_payment_canceled'));
+        $this->pfHelper->setFlashMsg(Payfort_Fort_Language::__($this->registry, 'text_payment_canceled'));
         return true;
     }
     

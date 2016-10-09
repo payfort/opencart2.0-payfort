@@ -14,10 +14,10 @@ class ControllerPaymentPayfortFort extends Controller {
     public function __construct($registry)
     {
         parent::__construct($registry);
-        $this->pfConfig        = Payfort_Fort_Config::getInstance();
-        $this->pfPayment       = Payfort_Fort_Payment::getInstance();
-        $this->pfHelper        = Payfort_Fort_Helper::getInstance();
-        $this->pfOrder         = new Payfort_Fort_Order();
+        $this->pfConfig        = Payfort_Fort_Config::getInstance($registry);
+        $this->pfPayment       = Payfort_Fort_Payment::getInstance($registry);
+        $this->pfHelper        = Payfort_Fort_Helper::getInstance($registry);
+        $this->pfOrder         = new Payfort_Fort_Order($registry);
         $this->integrationType = $this->pfConfig->getCcIntegrationType();
         $this->paymentMethod   = PAYFORT_FORT_PAYMENT_METHOD_CC;
     }
@@ -112,7 +112,6 @@ class ControllerPaymentPayfortFort extends Controller {
 
     public function responseOnline()
     {
-
         $this->_handleResponse('online');
     }
 
