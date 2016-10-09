@@ -14,6 +14,9 @@ Click on the edit link to set up the module configuration
 
 ## Changelog
 
+`v1.2.1`
+- Added Compatibilty for opencart v2.3+
+
 `v1.2.0`
 - Rearrange payment methods configuration in admin panel.
 - Added option for Gateway currency.
