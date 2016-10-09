@@ -11,6 +11,11 @@ class ControllerPaymentPayfortFort extends Controller {
 
         $this->load->model('setting/setting');
 
+        $paymentExtenstionUrl = $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL');
+        if(version_compare(VERSION, '2.3', '>=')) {
+            $paymentExtenstionUrl = $this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=payment', true);
+        }
+        
         if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
             $this->model_setting_setting->editSetting('payfort_fort', $this->request->post);
             
@@ -23,7 +28,7 @@ class ControllerPaymentPayfortFort extends Controller {
             
             $this->session->data['success'] = $this->language->get('text_success');
 
-            $this->response->redirect($this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL'));
+            $this->response->redirect($paymentExtenstionUrl);
         }
 
         $data['heading_title'] = $this->language->get('heading_title');
@@ -137,7 +142,7 @@ class ControllerPaymentPayfortFort extends Controller {
 
         $data['breadcrumbs'][] = array(
             'text' => $this->language->get('text_payment'),
-            'href' => $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL'),
+            'href' => $paymentExtenstionUrl,
             'separator' => ' :: '
         );
 
@@ -149,7 +154,7 @@ class ControllerPaymentPayfortFort extends Controller {
 
         $data['action'] = $this->url->link('payment/payfort_fort', 'token=' . $this->session->data['token'], 'SSL');
 
-        $data['cancel'] = $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL');
+        $data['cancel'] = $paymentExtenstionUrl;
 
         if (isset($this->request->post['payfort_fort_entry_merchant_identifier'])) {
             $data['payfort_fort_entry_merchant_identifier'] = $this->request->post['payfort_fort_entry_merchant_identifier'];

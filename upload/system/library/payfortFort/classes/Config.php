@@ -38,9 +38,9 @@ class Payfort_Fort_Config
     private $gatewaySandboxHost;
     private $logFileDir;
 
-    public function __construct()
+    public function __construct($registry)
     {
-        $this->registry = Payfort_Fort_Util::getRegistry();
+        $this->registry = $registry;
 
         $this->gatewayProdHost    = 'https://checkout.payfort.com/';
         $this->gatewaySandboxHost = 'https://sbcheckout.payfort.com/';
@@ -69,10 +69,10 @@ class Payfort_Fort_Config
     /**
      * @return Payfort_Fort_Config
      */
-    public static function getInstance()
+    public static function getInstance($registry)
     {
         if (self::$instance === null) {
-            self::$instance = new Payfort_Fort_Config();
+            self::$instance = new Payfort_Fort_Config($registry);
         }
         return self::$instance;
     }
@@ -86,7 +86,7 @@ class Payfort_Fort_Config
     {
         $langCode = $this->language;
         if ($this->language == 'store') {
-            $langCode = Payfort_Fort_Language::getCurrentLanguageCode();
+            $langCode = Payfort_Fort_Language::getCurrentLanguageCode($this->registry);
         }
         if ($langCode != 'ar') {
             $langCode = 'en';

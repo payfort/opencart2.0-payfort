@@ -7,19 +7,19 @@ class Payfort_Fort_Helper
     private $registry;
     private $pfConfig;
 
-    public function __construct()
+    public function __construct($registry)
     {
-        $this->pfConfig = Payfort_Fort_Config::getInstance();
-        $this->registry = Payfort_Fort_Util::getRegistry();
+        $this->pfConfig = Payfort_Fort_Config::getInstance($registry);
+        $this->registry = $registry;
     }
 
     /**
      * @return Payfort_Fort_Config
      */
-    public static function getInstance()
+    public static function getInstance($registry)
     {
         if (self::$instance === null) {
-            self::$instance = new Payfort_Fort_Helper();
+            self::$instance = new Payfort_Fort_Helper($registry);
         }
         return self::$instance;
     }
