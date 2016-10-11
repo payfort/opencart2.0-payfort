@@ -230,11 +230,19 @@ class ControllerPaymentPayfortFort extends Controller {
 		$data['footer'] = $this->load->controller('common/footer');
 		$data['header'] = $this->load->controller('common/header');
 
-		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/common/success.tpl')) {
-			$this->response->setOutput($this->load->view($this->config->get('config_template') . '/template/common/success.tpl', $data));
-		} else {
-			$this->response->setOutput($this->load->view('default/template/common/success.tpl', $data));
-		}
+                $template = '';
+                if (version_compare(VERSION, '2.2.0.0') >= 0) {
+                    $template = 'common/success.tpl';
+                }
+                else {
+                    if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/common/success.tpl')) {
+                        $template = $this->config->get('config_template') . '/template/common/success.tpl';
+                    } else {
+                        $template = 'default/template/common/success.tpl';
+                    }
+                }
+
+                $this->response->setOutput($this->load->view($template, $data));
 	}
 }
 
