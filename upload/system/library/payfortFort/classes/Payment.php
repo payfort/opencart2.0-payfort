@@ -237,6 +237,7 @@ class Payfort_Fort_Payment
             'customer_email'      => $this->pfOrder->getEmail(),
             'token_name'          => $fortParams['token_name'],
             'language'            => $language,
+            'remember_me'         => 'NO',
             'return_url'          => $this->pfHelper->getReturnUrl('responseOnline')
         );
         $customerName = $this->pfOrder->getCustomerName();
