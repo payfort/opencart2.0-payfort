@@ -211,6 +211,7 @@ class Payfort_Fort_Payment
                 }
             }
         } catch (Exception $e) {
+            unset($this->registry->get('session')->data['order_id']);
             $this->pfHelper->setFlashMsg($e->getMessage(), PAYFORT_FORT_FLASH_MSG_ERROR);
             return false;
         }
