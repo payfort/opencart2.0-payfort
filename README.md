@@ -6,6 +6,16 @@ This is a Payfort Payment Gateway Extension for Opencart **2.0.0**.
 
 Using FTP, upload entire contetn from inside upload folder to the root of your opencart store.
 
+## IMPORTANT 
+
+After installing Payfort plugin , if you getting "Page Not Found!" Error on extention->payments  page , 
+Try to remove these directories from your server :
+
+1. {opncart_path}/admin/controller/extection/payment
+2. {opncart_path}/catalog/controller/extection/payment
+
+only who have opencart `v2.0.x.x` might face this issue.
+
 ## Configuration
 
 Go to Admin > Extensions > Payments and click install next to the Payfort Start module.
