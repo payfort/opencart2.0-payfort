@@ -14,7 +14,7 @@ Try to remove these directories from your server :
 1. {opncart_path}/admin/controller/extection/payment
 2. {opncart_path}/catalog/controller/extection/payment
 
-only who have opencart `v2.0.x.x` might get this error.
+only who have opencart `v2.0.x.x` might face this issue.
 
 ## Configuration
 
