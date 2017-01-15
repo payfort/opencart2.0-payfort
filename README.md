@@ -11,8 +11,8 @@ Using FTP, upload entire contetn from inside upload folder to the root of your o
 After installing Payfort plugin , if you getting "Page Not Found!" Error on extention->payments  page , 
 Try to remove these directories from your server :
 
-1. {opncart_path}/admin/controller/extection/payment
-2. {opncart_path}/catalog/controller/extection/payment
+1. {opncart_path}/admin/controller/extension/payment
+2. {opncart_path}/catalog/controller/extension/payment
 
 only who have opencart `v2.0.x.x` might face this issue.
 
