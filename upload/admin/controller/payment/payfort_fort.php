@@ -20,15 +20,10 @@ class ControllerPaymentPayfortFort extends Controller {
             //fix install method not working
             if(version_compare(VERSION, '2.3', '>=')) {
                 $this->load->model('extension/extension');
-                $installed_modules = $this->model_extension_extension->getInstalled('payment');
-                if(!in_array('payfort_fort_sadad', $installed_modules)) {
-                    $this->load->model('extension/extension');
-                    $this->model_extension_extension->install('payment', 'payfort_fort_sadad');
-                }
-                if(!in_array('payfort_fort_qpay', $installed_modules)) {
-                    $this->load->model('extension/extension');
-                    $this->model_extension_extension->install('payment', 'payfort_fort_qpay');
-                }
+                $this->load->model('extension/extension');
+                $this->model_extension_extension->install('payment', 'payfort_fort_sadad');
+                $this->load->model('extension/extension');
+                $this->model_extension_extension->install('payment', 'payfort_fort_qpay');
             }
             
             $this->model_setting_setting->editSetting('payfort_fort', $this->request->post);
