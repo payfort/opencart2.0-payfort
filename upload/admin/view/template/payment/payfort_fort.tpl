@@ -28,6 +28,7 @@
                     <ul class="nav nav-tabs" id="tabs">
                         <li class="active"><a href="#tab-general" data-toggle="tab"><?php echo $tab_general; ?></a></li>
                         <li><a href="#tab-cc" data-toggle="tab"><?php echo $tab_credit_card; ?></a></li>
+                        <li><a href="#tab-installments" data-toggle="tab"><?php echo $tab_installments; ?></a></li>
                         <li><a href="#tab-sadad" data-toggle="tab"><?php echo $tab_sadad; ?></a></li>
                         <li><a href="#tab-naps" data-toggle="tab"><?php echo $tab_naps; ?></a></li>
                     </ul>
@@ -208,6 +209,35 @@
                                 <label class="col-sm-2 control-label" for=""><?php echo $entry_sort_order; ?></label>
                                 <div class="col-sm-10">
                                     <input type="text" name="payfort_fort_sort_order" value="<?php echo $payfort_fort_sort_order; ?>" size="1" class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab-installments">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for=""><?php echo $entry_status; ?></label>
+                                <div class="col-sm-10">
+                                    <select name="payfort_fort_installments" class="form-control">
+                                        <option value="1" <?php echo ($payfort_fort_installments) ? 'selected="selected"' : '' ?>><?php echo $text_enabled; ?></option>
+                                        <option value="0" <?php echo (!$payfort_fort_installments) ? 'selected="selected"' : '' ?>><?php echo $text_disabled; ?></option>
+                                    </select>
+                                    <?php if ($payfort_fort_payment_method_required) { ?>
+                                    <span style="color:red"><?php echo $payfort_fort_payment_method_required; ?></span>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="input-installments-integration-type"><span data-toggle="tooltip" title="<?php echo $help_installments_integration_type; ?>"><?php echo $entry_installments_integration_type ?></span></label>
+                                <div class="col-sm-10">
+                                    <select name="payfort_fort_installments_integration_type" id="input-installments-integration-type" class="form-control">
+                                        <option value="redirection" <?php echo ($payfort_fort_installments_integration_type == 'redirection') ? 'selected="selected"' : '' ?>><?php echo $text_redirection; ?></option>
+                                        <option value="merchantPage" <?php echo ($payfort_fort_installments_integration_type == 'merchantPage') ? 'selected="selected"' : '' ?>><?php echo $text_merchant_page; ?></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for=""><?php echo $entry_sort_order; ?></label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="payfort_fort_installments_sort_order" value="<?php echo $payfort_fort_installments_sort_order; ?>" size="1" class="form-control"/>
                                 </div>
                             </div>
                         </div>

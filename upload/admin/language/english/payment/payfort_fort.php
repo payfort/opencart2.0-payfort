@@ -24,6 +24,7 @@ $_['entry_merchant_identifier'] = 'Merchant Identifier';
 $_['entry_purchase']            = 'purchase';
 $_['entry_authorization']       = 'authorization';
 $_['entry_language']            = 'Language';
+$_['entry_installments']               = 'Enable Installments';
 $_['entry_sadad']               = 'Enable SADAD';
 $_['entry_naps']                = 'Enable NAPS';
 $_['entry_credit_card']         = 'Enable Credit \ Debit Card';
@@ -37,6 +38,7 @@ $_['entry_hash_algorithm']      = 'Hash Algorithm';
 $_['entry_request_sha_phrase']  = 'Request SHA Phrase';
 $_['entry_response_sha_phrase'] = 'Response SHA Phrase';
 $_['entry_cc_integration_type'] = 'Integration Type';
+$_['entry_installments_integration_type'] = 'Integration Type';
 $_['entry_debug']               = 'Debug mode:';
 $_['entry_gateway_currency']    = 'Gateway Currency';
 $_['text_base_currency']        = 'Base Currency';
@@ -53,6 +55,7 @@ $_['text_payfort_fort'] = '<a href="https://www.payfort.com" target="_blank"><im
 $_['help_test']                = 'Use the live or testing (sandbox) gateway server to process transactions?';
 $_['help_total']               = 'The checkout total the order must reach before this payment method becomes active';
 $_['help_cc_integration_type'] = 'Credit \ Debit Card Integration Type';
+$_['help_installments_integration_type'] = 'Installments Integration Type';
 $_['help_debug']               = 'Logs additional information.<br>Log file path: {{base_dir}}/system/storage/logs/payfort_fort.log';
 
 $_['error_permission'] = 'Warning: You do not have permission to modify FORT Payments!';
@@ -65,5 +68,6 @@ $_['payfort_fort_payment_method_required']         = 'At Least 1 Payment Method 
 
 $_['tab_general'] = 'General';
 $_['tab_credit_card'] = 'Credit \ Debit Card';
+$_['tab_installments'] = 'Installments';
 $_['tab_sadad'] = 'SADAD';
 $_['tab_naps'] = 'NAPS';
