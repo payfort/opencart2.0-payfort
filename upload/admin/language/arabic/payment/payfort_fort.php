@@ -24,6 +24,7 @@ $_['entry_merchant_identifier'] = 'معرف التاجر';
 $_['entry_purchase']            = 'شراء';
 $_['entry_authorization']       = 'تخويل';
 $_['entry_language']            = 'اللغة';
+$_['entry_installments']               = 'تفعيل خدمة التقسيط';
 $_['entry_sadad']               = 'تفعيل خدمة سداد';
 $_['entry_naps']                = '"NAPS"تفعيل خدمة';
 $_['entry_credit_card']         = 'تفعيل البطاقات الائتمانية/ بطاقات الدين';
@@ -37,6 +38,7 @@ $_['entry_hash_algorithm']      = 'خوارزمية التجزئة';
 $_['entry_request_sha_phrase']  = 'عبارة طلب تشفير (SHA)';
 $_['entry_response_sha_phrase'] = 'عبارة رد تشفير (SHA)';
 $_['entry_cc_integration_type'] = 'Integration Type';
+$_['entry_installments_integration_type'] = 'Integration Type';
 $_['entry_debug']               = 'Debug mode:';
 $_['entry_gateway_currency']    = 'Gateway Currency';
 $_['text_base_currency']        = 'Base Currency';
@@ -53,6 +55,7 @@ $_['text_payfort_fort']        = '<a href="https://www.payfort.com" target="_bla
 $_['help_test']                = 'استخدم بوابة خادم البوابة المباشرة أو بوابة التجربة لمعالجة العملية';
 $_['help_total']               = 'إجمالي المبلغ الذي يجب أن يصله الطلب عند تسجيل الخروج قبل تفعيل وسيلة الدفع هذه';
 $_['help_cc_integration_type'] = 'Credit \ Debit Card Integration Type';
+$_['help_installments_integration_type'] = 'Installments Integration Type';
 $_['help_debug']               = 'Logs additional information.<br>Log file path: {{base_dir}}/system/storage/logs/payfort_fort.log';
 
 $_['error_permission'] = 'تحذير: لا يمكنك تعديل دفعات الـFORT ';
@@ -65,5 +68,6 @@ $_['payfort_fort_payment_method_required']         = 'يجب تفعيل وسيل
 
 $_['tab_general'] = 'General';
 $_['tab_credit_card'] = 'Credit \ Debit Card';
+$_['tab_installments'] = 'Installments';
 $_['tab_sadad'] = 'SADAD';
 $_['tab_naps'] = 'NAPS';

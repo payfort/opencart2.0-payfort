@@ -43,7 +43,7 @@ $('#button-confirm').bind('click', function () {
 }
 iframe#payfort_merchant_page {
     width:80% !important;
-    min-height:100% !important;
+    min-height:600px !important;
 }
 .pf-close-container{
     display:block;
