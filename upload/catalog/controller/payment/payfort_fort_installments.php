@@ -82,7 +82,14 @@ class ControllerPaymentPayfortFortInstallments extends Controller {
         else {
             $redirectUrl = 'checkout/checkout';
         }
-        header('location:' . $this->url->link($redirectUrl));
+        if ($this->pfConfig->isInstallmentsMerchantPage()) {
+            echo '<script>window.top.location.href = "' . $this->url->link($redirectUrl) . '"</script>';
+            exit;
+        }
+        else {
+            header('location:' . $this->url->link($redirectUrl));
+        }
     }
 }
+
 
