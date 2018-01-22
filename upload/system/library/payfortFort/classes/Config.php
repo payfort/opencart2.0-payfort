@@ -289,6 +289,14 @@ class Payfort_Fort_Config
         return $this->installmentsStatus;
     }
 
+    public function isInstallmentsMerchantPage()
+    {
+        if ($this->installmentsIntegrationType == PAYFORT_FORT_INTEGRATION_TYPE_MERCAHNT_PAGE) {
+            return true;
+        }
+        return false;
+    }
+
 }
 
 ?>

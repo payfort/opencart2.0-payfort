@@ -69,6 +69,7 @@ class Payfort_Fort_Payment
                 $gatewayParams['currency']       = strtoupper($currency);
                 $gatewayParams['installments']   = 'STANDALONE';
                 $gatewayParams['amount']         = $this->pfHelper->convertFortAmount($this->pfOrder->getTotal(), $this->pfOrder->getCurrencyValue(), $currency);
+                $gatewayParams['return_url']      = $this->pfHelper->getUrl('payment/payfort_fort_installments/merchantPageResponse');
                 }
         }
         $signature                  = $this->pfHelper->calculateSignature($gatewayParams, 'request');
