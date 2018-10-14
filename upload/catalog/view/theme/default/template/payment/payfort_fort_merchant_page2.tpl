@@ -14,7 +14,7 @@
         <div class="form-group required">
             <label class="col-sm-2 control-label" for="payfort_fort_card_number"><?php echo $text_card_number; ?></label>
             <div class="col-sm-10">
-                <input type="text" id="payfort_fort_card_number" name="card_number" value="" placeholder="<?php echo $text_card_number; ?>" class="form-control" autocomplete="off" maxlength="16" />
+                <input type="text" id="payfort_fort_card_number" name="card_number" value="" placeholder="<?php echo $text_card_number; ?>" class="form-control" autocomplete="off" maxlength="19" />
             </div>
         </div>
         <div class="form-group required">
