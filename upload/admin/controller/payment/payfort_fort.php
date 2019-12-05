@@ -85,8 +85,10 @@ class ControllerPaymentPayfortFort extends Controller {
         $data['entry_naps'] = $this->language->get('entry_naps');
         $data['entry_credit_card'] = $this->language->get('entry_credit_card');
         $data['entry_cc_integration_type'] = $this->language->get('entry_cc_integration_type');
+        $data['entry_cc_mada_branding'] = $this->language->get('entry_cc_mada_branding');
         $data['entry_installments_integration_type'] = $this->language->get('entry_installments_integration_type');
         $data['help_cc_integration_type'] = $this->language->get('help_cc_integration_type');
+        $data['help_cc_mada_branding'] = $this->language->get('help_cc_mada_branding');
         $data['help_installments_integration_type'] = $this->language->get('help_installments_integration_type');
         $data['text_merchant_page'] = $this->language->get('text_merchant_page');
         $data['text_merchant_page2'] = $this->language->get('text_merchant_page2');
@@ -100,6 +102,8 @@ class ControllerPaymentPayfortFort extends Controller {
         $data['text_front_currency'] = $this->language->get('text_front_currency');
         $data['help_gateway_currency'] = $this->language->get('help_gateway_currency');
         $data['text_store_language'] = $this->language->get('text_store_language');
+        $data['text_cc_with_mada'] = $this->language->get('text_cc_with_mada');
+        
                 
         $data['button_save'] = $this->language->get('button_save');
         $data['button_cancel'] = $this->language->get('button_cancel');
@@ -279,6 +283,12 @@ class ControllerPaymentPayfortFort extends Controller {
             $data['payfort_fort_cc_integration_type'] = $this->request->post['payfort_fort_cc_integration_type'];
         } else {
             $data['payfort_fort_cc_integration_type'] = $this->config->get('payfort_fort_cc_integration_type');
+        }
+        
+        if (isset($this->request->post['payfort_fort_cc_mada_branding'])) {
+            $data['payfort_fort_cc_mada_branding'] = $this->request->post['payfort_fort_cc_mada_branding'];
+        } else {
+            $data['payfort_fort_cc_mada_branding'] = $this->config->get('payfort_fort_cc_mada_branding');
         }
         
         if (isset($this->request->post['payfort_fort_status'])) {

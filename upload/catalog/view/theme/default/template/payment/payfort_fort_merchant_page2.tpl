@@ -4,7 +4,23 @@
         <?php foreach ($payment_request_params['params'] as $k => $v): ?>
             <input type="hidden" name="<?php echo $k?>" value="<?php echo $v?>">
         <?php endforeach; ?>
-        <legend><?php echo $text_credit_card; ?></legend>
+        <legend><?php if ($payfort_fort_cc_mada_branding=='Enabled') echo $text_cc_with_mada;else echo $text_credit_card; ?></legend>
+        
+         
+        
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="payfort_fort_card_holder_name"></label>    
+            <div class="col-sm-10">
+            <?php if ($payfort_fort_cc_mada_branding=='Enabled') { ?>
+            <img src="catalog/view/theme/default/image/payfort_mada.jpeg" alt="mada" height="26" width="50"/>
+            <?php } ?>
+            <img src="catalog/view/theme/default/image/payfort_visa.png" alt="visa" height="26" width="42"/>
+            <img src="catalog/view/theme/default/image/payfort_mastercard.jpeg" alt="mc" height="26" width="42"/>
+            </div>    
+        </div>
+        
+        
+        
         <div class="form-group">
             <label class="col-sm-2 control-label" for="payfort_fort_card_holder_name"><?php echo $text_card_holder_name; ?></label>
             <div class="col-sm-10">

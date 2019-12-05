@@ -20,6 +20,7 @@ $_['text_merchant_page'] = 'Merchant Page';
 $_['text_merchant_page2'] = 'Merchant Page 2.0';
 $_['text_store_language'] = 'Store Language';
 
+
 $_['entry_merchant_identifier'] = 'معرف التاجر';
 $_['entry_purchase']            = 'شراء';
 $_['entry_authorization']       = 'تخويل';
@@ -38,12 +39,14 @@ $_['entry_hash_algorithm']      = 'خوارزمية التجزئة';
 $_['entry_request_sha_phrase']  = 'عبارة طلب تشفير (SHA)';
 $_['entry_response_sha_phrase'] = 'عبارة رد تشفير (SHA)';
 $_['entry_cc_integration_type'] = 'Integration Type';
+$_['entry_cc_mada_branding']    = 'mada option';
 $_['entry_installments_integration_type'] = 'Integration Type';
 $_['entry_debug']               = 'Debug mode:';
 $_['entry_gateway_currency']    = 'Gateway Currency';
 $_['text_base_currency']        = 'Base Currency';
 $_['text_front_currency']       = 'Front Currency';
 $_['help_gateway_currency']     = 'The Currency should be sent to payment gateway.';
+$_['help_cc_mada_branding']    = 'تفعيل بطاقة مدى البنكية في المتجر';
 
 $_['entry_order_placement'] = 'Order Placement';
 $_['text_on_success'] = 'On Success';

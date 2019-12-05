@@ -4,6 +4,7 @@
 $_['text_title']            = 'Credit / Debit Card';
 $_['text_wait']             = 'Please wait!';
 $_['text_credit_card']      = 'Credit Card Details';
+$_['text_cc_with_mada']     = 'Credit Card / mada Bank Card Details';
 $_['text_loading']          = 'Loading';
 $_['heading_failed_title']  = 'Payment Failed!';
 $_['heading_success_title'] = 'Your Order Has Been Processed!';
