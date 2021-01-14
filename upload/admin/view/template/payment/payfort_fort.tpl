@@ -91,7 +91,9 @@
                                     <select name="payfort_fort_entry_hash_algorithm" class="form-control">
                                         <option value="sha1" <?php echo ($payfort_fort_entry_hash_algorithm == 'sha1') ? 'selected="selected"' : '' ?>><?php echo $text_sha1; ?></option>
                                         <option value="sha256" <?php echo ($payfort_fort_entry_hash_algorithm == 'sha256') ? 'selected="selected"' : '' ?>><?php echo $text_sha256; ?></option>
-                                        <option value="sha512" <?php echo ($payfort_fort_entry_hash_algorithm == 'sha512') ? 'selected="selected"' : '' ?>><?php echo $text_sha512; ?></option>                                    
+                                        <option value="sha512" <?php echo ($payfort_fort_entry_hash_algorithm == 'sha512') ? 'selected="selected"' : '' ?>><?php echo $text_sha512; ?></option>
+                                        <option value="HMAC512" <?php echo ($payfort_fort_entry_hash_algorithm == 'HMAC512') ? 'selected="selected"' : '' ?>><?php echo $text_hmac512; ?></option>                                    
+                                        <option value="HMAC256" <?php echo ($payfort_fort_entry_hash_algorithm == 'HMAC256') ? 'selected="selected"' : '' ?>><?php echo $text_hmac256; ?></option>                                    
                                     </select>
                                 </div>
                             </div>
