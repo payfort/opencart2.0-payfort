@@ -205,6 +205,17 @@
                                     </select>
                                 </div>
                             </div>
+                            
+                             <div class="form-group">
+                                <label class="col-sm-2 control-label" for="input-cc-mada-option"><span data-toggle="tooltip" title="<?php echo $help_cc_mada_branding; ?>"><?php echo $entry_cc_mada_branding ?></span></label>
+                                <div class="col-sm-10">
+                                    <select name="payfort_fort_cc_mada_branding" id="input-cc-mada-branding" class="form-control">                                      
+                                        <option value="Disabled" <?php echo ($payfort_fort_cc_mada_branding == 'Disabled') ? 'selected="selected"' : '' ?>><?php echo $text_disabled; ?></option>
+                                        <option value="Enabled"  <?php echo ($payfort_fort_cc_mada_branding == 'Enabled') ? 'selected="selected"' : '' ?>><?php echo $text_enabled; ?></option>                                        
+                                    </select>
+                                </div>
+                            </div>
+                            
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for=""><?php echo $entry_sort_order; ?></label>
                                 <div class="col-sm-10">

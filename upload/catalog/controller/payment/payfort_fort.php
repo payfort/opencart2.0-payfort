@@ -10,6 +10,7 @@ class ControllerPaymentPayfortFort extends Controller {
     public $pfPayment;
     public $pfHelper;
     public $pfOrder;
+    public $madaBranding;
 
     public function __construct($registry)
     {
@@ -19,6 +20,7 @@ class ControllerPaymentPayfortFort extends Controller {
         $this->pfHelper        = Payfort_Fort_Helper::getInstance($registry);
         $this->pfOrder         = new Payfort_Fort_Order($registry);
         $this->integrationType = $this->pfConfig->getCcIntegrationType();
+        $this->madaBranding    = $this->pfConfig->getCcMadaBranding();
         $this->paymentMethod   = PAYFORT_FORT_PAYMENT_METHOD_CC;
     }
     
@@ -33,7 +35,17 @@ class ControllerPaymentPayfortFort extends Controller {
         
         //$this->load->model('setting/setting');
         $data['payfort_fort_cc_integration_type'] = $this->integrationType;
-        
+	$frontCurrency = $this->pfHelper->getFrontCurrency();
+        $baseCurrency  = $this->pfHelper->getBaseCurrency();        
+        $currency      = $this->pfHelper->getFortCurrency($baseCurrency, $frontCurrency);
+        if ($currency == 'SAR') {
+             $data['payfort_fort_cc_mada_branding']    = $this->madaBranding;
+        }
+        else 
+        {
+             $data['payfort_fort_cc_mada_branding']    = 'Disabled';            
+        }
+       
         $this->load->model('payment/payfort_fort');
         $data['payment_request_params'] = '';
         $template = 'payfort_fort.tpl';
@@ -47,6 +59,7 @@ class ControllerPaymentPayfortFort extends Controller {
             $data['payment_request_params'] = $this->pfPayment->getPaymentRequestParams($this->paymentMethod, $this->integrationType);
             
             $data['text_credit_card'] = $this->language->get('text_credit_card');
+            $data['text_cc_with_mada'] = $this->language->get('text_cc_with_mada');
             $data['text_card_holder_name'] = $this->language->get('text_card_holder_name');
             $data['text_card_number'] = $this->language->get('text_card_number');
             $data['text_expiry_date'] = $this->language->get('text_expiry_date');

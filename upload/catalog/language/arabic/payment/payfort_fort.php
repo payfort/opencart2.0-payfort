@@ -4,6 +4,7 @@
 $_['text_title']            = 'بطاقة ائتمان';
 $_['text_wait']             = 'يرجى الانتظار';
 $_['text_credit_card']      = 'تفاصيل بطاقة الائتمان';
+$_['text_cc_with_mada']     = 'بطاقة الائتمان / بطاقة مدى البنكية';
 $_['text_loading']          = 'جاري التحميل';
 $_['heading_failed_title']  = 'فشلت عملية الدفع!';
 $_['heading_success_title'] = 'تمت عملية الدفع بنجاح';
