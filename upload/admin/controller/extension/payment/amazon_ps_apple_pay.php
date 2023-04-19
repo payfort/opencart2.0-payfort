@@ -95,10 +95,9 @@ class ControllerExtensionPaymentAmazonPSApplePay extends Controller {
 		if (!$this->user->hasPermission('modify', 'extension/payment/amazon_ps_apple_pay')) {
 			$error = $this->language->get('error_permission');
 		}
-
 		
 		if (!$error) {
-			if ((!empty($this->request->files['certificate_file']['name']) && is_file($this->request->files['certificate_file']['tmp_name']))|| 
+			if ((!empty($this->request->files['certificate_file']['name']) && is_file($this->request->files['certificate_file']['tmp_name'])) ||
 				(!empty($this->request->files['certificate_key_file']['name']) && is_file($this->request->files['certificate_key_file']['tmp_name']))) {				
 				// Return any upload error
 				if ($this->request->files['certificate_file']['error'] != UPLOAD_ERR_OK) {
@@ -108,13 +107,16 @@ class ControllerExtensionPaymentAmazonPSApplePay extends Controller {
 					$error = $this->language->get('error_upload_' . $this->request->files['certificate_key_file']['error']);
 				}
 				if(!$error){
-					$this->uploadFile('certificate_file');
-					$this->uploadFile('certificate_key_file');
+					$error = $this->uploadFile('certificate_file', ['pem', 'crt']);
+                }
+                if(!$error){
+					$error = $this->uploadFile('certificate_key_file', ['pem', 'key']);
 				}
 			} else {
 				$error = $this->language->get('error_upload');
 			}
 		}
+
 		if($error){
 			$this->session->data['upload_error'] = $error;
 			$succes = false;
@@ -123,20 +125,26 @@ class ControllerExtensionPaymentAmazonPSApplePay extends Controller {
 			$this->load->model('setting/setting');
 			$this->model_setting_setting->editSetting('amazon_ps_apple_pay', $this->request->post);
 		}
+
 		$this->response->redirect($this->url->link('extension/payment/amazon_ps_apple_pay/certificate', 'token=' . $this->session->data['token'], true));
 	}
 
-	public function uploadFile($file){
+	public function uploadFile($file, $possibleExtensions = null) {
 		try{
 			// Where the file is going to be stored
 			$path = pathinfo($this->request->files[$file]['name']);
 
-			$filename = $path['filename'];
-			$ext = $path['extension'];
+            $hashedFileName = hash('md5', $this->session->data['user_token'] . '.' . $file . time());
+            $ext = $path['extension'];
+
+            if (null !== $possibleExtensions && !in_array(strtolower($ext), $possibleExtensions, true)) {
+                $msg = "Error! The " . $file . "file must have one of the following extensions: " . implode(', ', $possibleExtensions);
+                throw new Exception($msg);
+            }
 
 			$temp_name = $this->request->files[$file]['tmp_name'];
 
-			$path_filename_ext = DIR_UPLOAD . basename(html_entity_decode($filename.".".$ext, ENT_QUOTES, 'UTF-8'));
+			$path_filename_ext = DIR_UPLOAD . basename(html_entity_decode($hashedFileName.".".$ext, ENT_QUOTES, 'UTF-8'));
 			 
 			if (move_uploaded_file($temp_name, $path_filename_ext)) {
 
@@ -144,9 +152,11 @@ class ControllerExtensionPaymentAmazonPSApplePay extends Controller {
 				$msg = "An error occurred while file upload";
 				throw new Exception($msg);
 			}
-			$this->request->post['amazon_ps_apple_pay_'.$file] = $filename.".".$ext;
+			$this->request->post['amazon_ps_apple_pay_'.$file] = $hashedFileName.".".$ext;
+
+            return '';
 		}catch(Exception $e){
-			$this->session->data['upload_error'] = $e->getMessage();
+			return $this->session->data['upload_error'] = $e->getMessage();
 		}
 	}
 
