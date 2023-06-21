@@ -196,7 +196,7 @@ var apsPayment = (function () {
 			$( '#verfiy_otp_sec' ).slideDown().addClass( 'active' );
 		},
 		valuTenureBox: function( response ) {
-			$( '.valu_form.active' ).slideUp().removeClass( 'active' );
+			//$( '.valu_form.active' ).slideUp().removeClass( 'active' );
 			$( '#tenure_sec' ).slideDown().addClass( 'active' );
 			$( '#tenure_sec .tenure' ).html( response.tenure_html );
 			$( '#tenure_sec .tenure .tenure_carousel' ).slick(
@@ -456,7 +456,7 @@ var AmazonPSCall = {
 				url: 'index.php?route=extension/payment/'+payment_method+'/send',
 				type: 'post',
 				data: fdama,
-				async: false,
+				//async: false,
 				beforeSend: function () {
 					$('#button-confirm').attr('disabled', true);
 				},
@@ -484,7 +484,7 @@ var AmazonPSCall = {
 					else{
 						alert(text_general_error);
 					}                       
-					$( '#div-aps-loader' ).hide();
+					//$( '#div-aps-loader' ).hide();
 				},
 				error: function(xhr, ajaxOptions, thrownError) {
 					$( '#div-aps-loader' ).hide();
@@ -883,6 +883,9 @@ $( document.body ).on(
 	function(e) {
 		var ajaxurl       = 'index.php?route=extension/payment/amazon_ps_valu/valuCustomerVerify';
 		var mobile_number = $( '.aps_valu_mob_number' ).val().trim();
+		var down_payment = $( '.aps_valu_down_payment' ).val();
+		var tou = $( '.aps_valu_tou' ).val();
+		var cashback = $( '.aps_valu_cashback' ).val();
 		$( ".valu_process_error" ).html( "" );
 		if(mobile_number.length == 0){
 			$( ".valu_process_error" ).html( APSValidation.translate('required_field') );
@@ -895,6 +898,9 @@ $( document.body ).on(
 					type:'POST',
 					data: {
 						mobile_number,
+						down_payment,
+						tou,
+						cashback
 					},
 					beforeSend: function () {
 						$('.valu_customer_verify').attr('disabled', true);
@@ -916,9 +922,11 @@ $( document.body ).on(
 										$( '.valu_process_error' ).html( otp_response.message );
 										$( "#request_otp_sec" ).hide();
 									} else if ( 'error' === otp_response.status ) {
-										$( '.aps_valu_otp_verfiy_error' ).html( otp_response.message );
+										$( '.valu_process_error' ).html( otp_response.message );
 									} else if ( 'success' === otp_response.status ) {
 										apsPayment.valuOtpVerifyBox( otp_response );
+										apsPayment.valuTenureBox( otp_response );
+
 									}
 								}
 							});
@@ -933,6 +941,7 @@ $( document.body ).on(
 		} else {
 			$( ".valu_process_error" ).html( APSValidation.translate('valu_invalid_mobile') );
 		}
+		$('.valu_customer_verify').attr('disabled', false);
 	}
 );
 
@@ -956,7 +965,7 @@ $( document.body ).on(
 					$( ".valu_process_error" ).html( "" );
 					response = JSON.parse( response );
 					if ( 'success' === response.status ) {
-						apsPayment.valuTenureBox( response );
+						//apsPayment.valuTenureBox( response );
 						} else {
 						$( '.valu_process_error' ).html( response.message );
 					}
@@ -973,10 +982,12 @@ $( document.body ).on(
 		var ele     = $( this );
 		var tenure  = ele.attr( 'data-tenure' );
 		var tenure_amount   = ele.attr( 'data-tenure-amount' );
-		var tenure_interest = ele.attr( 'data-tenure-interest' );
+		var tenure_interest = ele.attr( 'data-tenure-admin-fee' );
+		var aps_otp         = $( '.aps_valu_otp' ).val();
 		$( '#aps_active_tenure' ).val( tenure );
 		$( '#aps_tenure_amount' ).val( tenure_amount );
 		$( '#aps_tenure_interest' ).val( tenure_interest );
+		$( '#aps_otp' ).val( aps_otp );
 		$( '.tenureBox.selected' ).removeClass( 'selected' );
 		ele.addClass( 'selected' );
 	}

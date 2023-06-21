@@ -407,6 +407,21 @@
                     </select>
                 </div>
               </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for=""><?php echo $entry_down_payment_status ?></label>
+                    <div class="col-sm-10">
+                        <select name="amazon_ps_valu_down_payment_status" class="form-control">
+                            <option value="1" <?php echo $amazon_ps_valu_down_payment_status == 1 ? 'selected="selected"' : ''  ?> > <?php echo $text_enabled; ?></option>
+                            <option value="0" <?php echo $amazon_ps_valu_down_payment_status == 0 ? 'selected="selected"' : '' ?> > <?php echo $text_disabled; ?></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for=""><?php echo $entry_down_payment_value ?></label>
+                    <div class="col-sm-10">
+                        <input type="text" name="amazon_ps_valu_down_payment_value" value="<?php echo $amazon_ps_valu_down_payment_value > 0 ? $amazon_ps_valu_down_payment_value: 0 ?>" size="1" class="form-control"/>
+                    </div>
+                </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label" for=""><?php echo $entry_valu_order_min_value ?></label>
                 <div class="col-sm-10">
