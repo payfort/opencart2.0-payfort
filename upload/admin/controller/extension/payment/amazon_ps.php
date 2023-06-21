@@ -113,6 +113,8 @@ class ControllerExtensionPaymentAmazonPS extends Controller {
 					'amazon_ps_knet_status',
 					'amazon_ps_knet_sort_order',
 					'amazon_ps_valu_status',
+                    'amazon_ps_valu_down_payment_status',
+                    'amazon_ps_valu_down_payment_value',
 					'amazon_ps_valu_order_min_value',
 					'amazon_ps_valu_sort_order',
 					'amazon_ps_apple_pay_status',

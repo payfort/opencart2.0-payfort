@@ -66,7 +66,7 @@ class ModelExtensionPaymentAmazonPS extends Model {
 
 		$text_var  =  ['text_edit', 'text_enabled', 'text_disabled', 'text_purchase', 'text_authorization', 'text_sha256', 'text_sha512', 'text_hmac256', 'text_hmac512', 'text_payment', 'text_redirection', 'text_standard_checkout', 'text_hosted_checkout', 'text_base_currency', 'text_front_currency', 'text_amex', 'text_visa', 'text_masterCard', 'text_mada', 'text_order_total', 'text_total_capture', 'text_remaining_capture', 'text_void', 'text_capture', 'text_refundable', 'text_refunded', 'text_refund', 'text_transactions', 'text_column_amount', 'text_column_type', 'text_column_date', 'text_column_title', 'text_column_value', 'text_confirm_capture', 'text_confirm_void', 'text_confirm_refund', 'text_15m', 'text_30m', 'text_45m', 'text_1h', 'text_2h', 'text_upload', 'text_upload_certificate', 'text_embedded_hosted_checkout'];
 
-		$entry_var =  ['entry_status', 'entry_merchant_identifier', 'entry_access_code', 'entry_request_sha_phrase', 'entry_response_sha_phrase', 'entry_sandbox', 'entry_command', 'entry_sha_type', 'entry_gateway_currency', 'entry_debug', 'entry_order_status', 'entry_api_key', 'entry_profile_name', 'entry_integration_type', 'entry_sort_order', 'entry_show_mada_branding', 'entry_show_meeza_branding', 'entry_tokenization', 'entry_hide_delete_token', 'entry_valu_order_min_value', 'entry_installments_sar_order_min_value', 'entry_installments_aed_order_min_value', 'entry_installments_egp_order_min_value', 'entry_installments_issuer_name', 'entry_installments_issuer_logo', 'entry_apple_pay_btn_type', 'entry_domain_name', 'entry_display_name', 'entry_production_key', 'entry_supported_network', 'entry_mada_bins', 'entry_meeza_bins', 'entry_recurring_cron', 'entry_check_status_cron', 'entry_check_status_cron_duration', 'entry_status_apple_pay_product_page', 'entry_status_apple_pay_cart_page'];
+		$entry_var =  ['entry_status', 'entry_merchant_identifier', 'entry_access_code', 'entry_request_sha_phrase', 'entry_response_sha_phrase', 'entry_sandbox', 'entry_command', 'entry_sha_type', 'entry_gateway_currency', 'entry_debug', 'entry_order_status', 'entry_api_key', 'entry_profile_name', 'entry_integration_type', 'entry_sort_order', 'entry_show_mada_branding', 'entry_show_meeza_branding', 'entry_tokenization', 'entry_hide_delete_token', 'entry_valu_order_min_value', 'entry_installments_sar_order_min_value', 'entry_installments_aed_order_min_value', 'entry_installments_egp_order_min_value', 'entry_installments_issuer_name', 'entry_installments_issuer_logo', 'entry_apple_pay_btn_type', 'entry_domain_name', 'entry_display_name', 'entry_production_key', 'entry_supported_network', 'entry_mada_bins', 'entry_meeza_bins', 'entry_recurring_cron', 'entry_check_status_cron', 'entry_check_status_cron_duration', 'entry_status_apple_pay_product_page', 'entry_status_apple_pay_cart_page', 'entry_down_payment_status','entry_down_payment_value'];
 
 		$help_var  = ['help_bins_text', 'help_display_name_text', 'help_recurring_cron', 'help_check_status_cron', 'help_check_status_cron_duration', 'help_gateway_currency', 'help_debug'];
 
@@ -196,9 +196,15 @@ class ModelExtensionPaymentAmazonPS extends Model {
 		}
 
 		if ( AmazonPSConstant::AMAZON_PS_PAYMENT_METHOD_VALU === $paymentMethod ) {
+
 			$tenure          = $this->getAmazonPSMetaValue( $orderId, 'valu_active_tenure');
 			$tenure_amount   = $this->getAmazonPSMetaValue( $orderId, 'valu_tenure_amount');
 			$tenure_interest = $this->getAmazonPSMetaValue( $orderId, 'valu_tenure_interest');
+            $down_payment = $this->getAmazonPSMetaValue( $orderId, 'valu_down_payment');
+            $tou = $this->getAmazonPSMetaValue( $orderId, 'valu_tou');
+            $cashback = $this->getAmazonPSMetaValue( $orderId, 'valu_cash_back');
+            $valu_transaction_id = $this->getAmazonPSMetaValue( $orderId, 'valu_transaction_id');
+            $loan_number         = $this->getAmazonPSMetaValue( $orderId, 'loan_number');
 			if ( ! empty( $tenure ) ) {
 				$data['order_extra_data'][] = array(
 					'label' => 'Tenure',
@@ -217,6 +223,36 @@ class ModelExtensionPaymentAmazonPS extends Model {
 					'value' => $tenure_interest . '%',
 				);
 			}
+            if ( ! empty( $down_payment ) ) {
+                $data['order_extra_data'][] = array(
+                    'label' => 'Down Payment',
+                    'value' => $down_payment . ' ' . $amazon_ps_data['currency'],
+                );
+            }
+            if ( ! empty( $tou ) ) {
+                $data['order_extra_data'][] = array(
+                    'label' => 'ToU',
+                    'value' => $tou . ' ' . $amazon_ps_data['currency'],
+                );
+            }
+            if ( ! empty( $cashback ) ) {
+                $data['order_extra_data'][] = array(
+                    'label' => 'Cash Back',
+                    'value' => $cashback . ' ' . $amazon_ps_data['currency'],
+                );
+            }
+            if ( ! empty( $valu_transaction_id ) ) {
+                $data['order_extra_data'][] = array(
+                    'label' => 'Transaction ID',
+                    'value' => $valu_transaction_id,
+                );
+            }
+            if ( ! empty( $loan_number ) ) {
+                $data['order_extra_data'][] = array(
+                    'label' => 'Loan number',
+                    'value' => $loan_number,
+                );
+            }
 		}
 
 		if ( isset( $amazon_ps_data['token_name'] ) && ! empty( $amazon_ps_data['token_name'] ) ) {
