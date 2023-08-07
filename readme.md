@@ -8,7 +8,31 @@ We know that payment processing is critical to your business. With this extensio
 
 ## Configuration and User Guide
 You can download the archive [file](/oc2_apsopencart_2.2.0.ocmod.zip) of the extension and easily install it via OpenCart admin screen (ocmod).
-OpenCart Extension user guide is included in the repository [here](/Opencart%20Extension%20User%20Guide.pdf) 
+OpenCart Extension user guide is included in the repository [here](https://github.com/payfort/opencart2.0-payfort/wiki) 
+
+# Installation
+##  Admin Panel
+- Login to [Admin Panel] of Opencart website 
+- Navigate to Extensions-> Installer 
+- Click on “Upload” and choose the extension zip file 
+- Under Install History section click on “Install” 
+- Follow the configuration steps mentioned in Step 3 
+## SFTP 
+- Connect via SFTP and navigate to [your site root folder] 
+- Copy Opencart APS extension folder under root folder 
+- Navigate to Extensions-> Extensions 
+- Under “Choose the extension type” choose Payments 
+- Under Payments section find a payment methods names as “Amazon Payment Services” 
+- Click on Install icon 
+- Follow the configuration steps mentioned in Step 3 
+## Configuration 
+
+Follow the below instruction to access configuration page of APS Opencart extension:  
+
+- Navigate to Extensions -> Extensions 
+- Under “Choose the extension type” choose Payments 
+- Under Payments section find a payment methods names as “Amazon Payment Services” 
+- Click on edit icon 
    
 
 ## Payment Options
